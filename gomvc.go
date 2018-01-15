@@ -1,8 +1,6 @@
 package gomvc
 
 import (
-	"fmt"
-
 	"github.com/astaxie/beego"
 )
 
@@ -15,10 +13,10 @@ func (this *Router) Show(tpl string) {
 }
 
 func Run() {
-	beego.LoadAppConfig("ini", "../resources/conf/app.conf")
-	fmt.Println("name ", beego.BConfig.AppName)
-	fmt.Println("appname", beego.AppConfig.String("appname"))
-	beego.BConfig.WebConfig.ViewsPath = "views"
+	beego.LoadAppConfig("ini", "src/resources/conf/app.conf")
+	// fmt.Println("name ", beego.BConfig.AppName)
+	// fmt.Println("appname", beego.AppConfig.String("appname"))
+	beego.BConfig.WebConfig.ViewsPath = "src/main/views"
 	// beego.SetStaticPath("/css","css") // todo mapper *.html -> public/*.html  *.css->/public/*.css
 	beego.Run()
 }

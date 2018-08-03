@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{.title}}</title>
+</head>
+<body>
+    <section>
+        <search>
+            <tr>
+                <td><label for="ssn">订单编号：</label></td>
+                <td><input class="search" id="ssn" type="text" name="sn"/></td>
+                <td><label for="sname">订单名称：</label></td>
+                <td><input class="search" id="sname" type="text" name="name"/></td>
+            </tr>
+        </search>
+        <datagrid>
+            <th data-options="field:'A',checkbox:true"></th>
+            <th data-options="field:'B',width:200">订单编号</th>
+            <th data-options="field:'C',width:200">订单名称</th>
+            <th data-options="field:'D',width:200">购买者</th>
+            <th data-options="field:'E',width:200">订单类型</th>
+            <th data-options="field:'F',width:200">价格</th>
+            <th data-options="field:'G',width:200">下单时间</th>
+        </datagrid>
+
+        <toolbar>
+        <a href="javascript:void(0)" onclick="exportexcel();" class="easyui-linkbutton" id="btexport" data-options="iconCls:'icon-print'">导出</a>
+        </toolbar>
+        <tools></tools>
+    </section>
+
+    <addsection>
+        <tr>
+            <td>邮箱:</td>
+            <td><input type="text" class="easyui-validatebox" name="email" data-options="required:true,validType:'email'" /></td>
+        </tr>
+        <tr>
+            <td>登录密码:</td>
+            <td><input type="text" class="easyui-validatebox" name="password" data-options="required:true,validType:'mima'" /></td>
+        </tr>
+        <tr>
+            <td>支付密码:</td>
+            <td><input type="text" class="easyui-validatebox" name="paypwd" data-options="required:true,validType:'mima'" /></td>
+        </tr>
+        <tr>
+            <td>英文名:</td>
+            <td><input type="text" class="easyui-validatebox" name="nickname" data-options="required:true,validType:'EGLS'" /></td>
+        </tr>
+        <tr>
+            <td>真实姓名:</td>
+            <td><input type="text" class="easyui-validatebox" name="name" data-options="required:true,validType:'CHS'" /></td>
+        </tr>
+        <tr>
+            <td>会员名:</td>
+            <td>
+                <select id="cc" class="easyui-combobox" name="showname" style="width:80px;" data-options="panelHeight:50">
+                    <option value="chinese" selected="selected">中文名</option>
+                    <option value="english">英文名</option>
+                </select>
+            </td>
+        </tr>
+    </addsection>
+
+    <editsection>
+        <tr>
+            <td><input type="hidden" name="uid" /></td>
+        </tr>
+        <tr>
+            <td>特批原由:</td>
+            <td><textarea class="easyui-validatebox" style="width:300px;height:60px" name="reason" data-options="required:true" /></textarea></td>
+        </tr>
+    </editsection>
+
+    <viewsection>
+        <tr>
+            <td>订单编号：</td>
+            <td><span set-key="A"></span></td>
+        </tr>
+        <tr>
+            <td>订单名称：</td>
+            <td><span set-key="B"></span></td>
+        </tr>
+        <tr>
+            <td>购买者：</td>
+            <td><span set-key="C"></span></td>
+        </tr>
+        <tr>
+            <td>订单类型：</td>
+            <td><span set-key="D"></span></td>
+        </tr>
+        <tr>
+            <td>价格：</td>
+            <td><span set-key="E">&nbsp;元</span></td>
+        </tr>
+        <tr>
+            <td>下单时间：</td>
+            <td><span set-key="F"></span></td>
+        </tr>
+    </viewsection>
+
+
+</body>
+</html>

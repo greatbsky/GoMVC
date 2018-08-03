@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>比特币BTC提币</title>
+    <script type="text/javascript">
+        function initDGData(row) {
+            for(var i in row) {
+                row[i].id = row[i].uid
+            }
+        }
+        function getFreshRowUrls(dg) {
+            var row = getSelected(dg);
+            var urls = new Array();
+            urls.push("{{.base}}/js/api/btc/list.json?id={0}".format(row.useruid));
+            return urls;
+        }
+
+        function freshRow(row, data, i) {
+            row.detail = data.rows;
+        }
+
+        function editAfter(obj, dg, editform) {
+            $('#list4user').datagrid({
+                data: getSelected(dg).detail
+            });
+        }
+    </script>
+</head>
+<body>
+<section>
+    <search>
+        <tr>
+            <td>提币金额（区间）:</td>
+            <td colspan="3">
+                <input id="amountfrom" name="amountfrom" type="text" />
+                --
+                <input id="amountto" name="amountto" type="text" /></td>
+        </tr>
+        <tr>
+            <td><label>提币状态: </label></td>
+            <td>
+                <input id="allstatus" type="radio" name="status" value=""/><label for="allstatus">全部</label>
+                <input id="unwithdrawed" type="radio" name="status" value="true"/><label for="unwithdrawed">未提币</label>
+                <input id="withdrawed" type="radio" name="status" value="false"/><label for="withdrawed">已提币</label>
+            </td>
+        </tr>
+    </search>
+
+    <datagrid title="提币列表" url="{{.base}}/js/api/btc/list.json">
+        <th data-options="field:'a'">账号</th>
+        <th data-options="field:'b'">提币地址</th>
+        <th data-options="field:'c'">手续费</th>
+        <th data-options="field:'c'">矿工费</th>
+        <th data-options="field:'c'">交易Hash</th>
+        <th data-options="field:'d'">提币状态</th>
+        <th data-options="field:'d'">时间</th>
+        <th data-options="field:'e', width: 1">操作人</th>
+    </datagrid>
+
+    <toolbar canadd="false" canview="false" candel="false" titleedit="操作">
+        <doaction id="refuse" action="{{.base}}/api/refxxx/delete" confirm="true">拒绝</doaction>
+        <doaction id="recover" action="{{.base}}/api/refxxx/delete" confirm="true">恢复</doaction>
+    </toolbar>
+    <tools></tools>
+</section>
+
+
+<editsection>
+    <tr>
+        <td></td><td><strong>用户信息</strong></td>
+    </tr>
+    <tr>
+        <td></td><td><strong>提币记录</strong></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td style="width: 900px">
+            <datagrid id="list4user" title="提币列表" data-options="fitColumns:true,resizeHandle:'right',pagination:false,singleSelect:true">
+                <th data-options="field:'a'">账号</th>
+                <th data-options="field:'b'">提币地址</th>
+                <th data-options="field:'c'">手续费</th>
+                <th data-options="field:'c'">矿工费</th>
+                <th data-options="field:'c'">交易Hash</th>
+                <th data-options="field:'d'">提币状态</th>
+                <th data-options="field:'d'">时间</th>
+                <th data-options="field:'e', width: 1">操作人</th>
+            </datagrid>
+        </td>
+    </tr>
+    <tr>
+        <td></td><td><strong>提币信息</strong><input type="hidden" name="id" /></td>
+    </tr>
+    <tr>
+        <td>账号:</td><td><span set-key="a"></span></td>
+    </tr>
+    <tr>
+        <td>提币地址:</td><td><span set-key="b"></span></td>
+    </tr>
+    <tr>
+        <td>手续费:</td><td><span set-key="c"></span></td>
+    </tr>
+    <tr>
+        <td>矿工费:</td><td><span set-key="d"></span></td>
+    </tr>
+    <tr>
+        <td>交易Hash:</td>
+        <td><input type="text" class="easyui-validatebox" name="name" data-options="required:true,validType:'EGLS'" /></td>
+    </tr>
+</editsection>
+
+</body>
+</html>

@@ -50,8 +50,8 @@
                     <form id="f_login" action="" method="post">
                         <h1>Log in</h1>
                         <p>
-                            <label for="username" class="uname" data-icon="u">管理员ID</label>
-                            <input id="txtusername" name="username" value="" required="required" placeholder="请输入管理员ID" />
+                            <label for="txtid" class="uname" data-icon="u">管理员ID</label>
+                            <input id="txtid" name="id" value="" required="required" placeholder="请输入管理员ID" />
                         </p>
                         <p>
                             <label for="password" class="youpasswd" data-icon="p">密码</label>

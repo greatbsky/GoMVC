@@ -14,6 +14,13 @@ func (this *Router) Show(tpl string) {
 	this.TplName = tpl
 }
 
+func (this *Router) Success() {
+	data := make(map[string]interface{})
+	data["success"] = true
+	this.Data["json"] = data
+	this.ServeJSON()
+}
+
 func (this *Router) Error404() {
 	this.TplName = "error/404.tpl"
 }

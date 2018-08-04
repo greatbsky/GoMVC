@@ -13,6 +13,7 @@ type ConfType struct {
 	BaseCss string
 	BaseJs  string
 	BaseImg string
+	BaseApi string
 	Domain  string
 
 	API APIType
@@ -23,10 +24,12 @@ type ConfType struct {
 
 type APIType struct {
 	Login string
+	Logout string
 }
 type SysType struct {
 	RootDir     string
 	DoPagesPath string
+	LoginToken string
 }
 
 /**
@@ -51,8 +54,11 @@ type SysType struct {
 func (this *ConfType) TagTplPath(tag string) string {
 	return Conf.Sys.RootDir + "/views/tags/" + tag + ".tpl"
 }
-func (this *ConfType) DoPagesPath(name string) string {
-	return filepath.Join(Conf.Sys.DoPagesPath, name + ".html")
+func (this *ConfType) GetDoPageHtmlPath(name string) string {
+	return this.GetDoPagePath(name + ".html")
+}
+func (this *ConfType) GetDoPagePath(path string) string {
+	return filepath.Join(Conf.Sys.DoPagesPath, path)
 }
 
 func init() {

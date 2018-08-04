@@ -53,5 +53,6 @@
         <p>it@{{.domain}}</p>
     </footer>
 </aside>
+{{template "base/foot.tpl" .}}
 </body>
 </html>

@@ -16,6 +16,7 @@ func (this *MainRouter) Index() {
 
 func (this *MainRouter) Login() {
 	this.Data["apiLogin"] = global.Conf.API.Login
+	this.Data["apiLogout"] = global.Conf.API.Logout
 	this.Show("login.tpl")
 }
 

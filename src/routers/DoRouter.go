@@ -32,7 +32,7 @@ func (this *DoRouter) Action() {
 	} else {
 		this.Ctx.Input.SetData("table", table)
 	}
-	doPagesPath := global.Conf.DoPagesPath(channel + table)
+	doPagesPath := global.Conf.GetDoPageHtmlPath(channel + table)
 	if utils.File.Exist(doPagesPath) {
 		content := utils.Template.Execute(doPagesPath, this.Ctx.Input.Data())
 		this.Data["head"] = hp.Do.ParseHead(content)

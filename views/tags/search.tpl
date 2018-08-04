@@ -1,5 +1,5 @@
 {{if .isStart}}
-    <form class="searchform" method="get" {{.attrFragment}} {{if not .attrs.action}}action="{{.base}}/api/{{.channel}}/{{.table}}/list"{{end}}>
+    <form class="searchform" method="get" {{.attrFragment}} {{if not .attrs.action}}action="{{.baseapi}}/api/{{.channel}}/{{.table}}/list"{{end}}>
     <table class="normal">
 {{else}}
     </table>

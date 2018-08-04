@@ -13,26 +13,15 @@
 </head>
 <body>
 <section>
-    <div class="easyui-panel mlfttop60" title="当前管理员信息" style="width:300px;">
+    <div class="easyui-panel mlfttop60" title="" style="width:300px;">
         <table cellpadding="6">
             <tr>
-                <td>姓名:</td>
-                <td>${(admin.name)!}</td>
-            </tr>
-            <tr>
-                <td>登录ID:</td>
-                <td>${(admin.adminid)!}</td>
-            </tr>
-            <tr>
-                <td>手机号码:</td>
-                <td>${(admin.mobile)!}</td>
-            </tr>
-            <tr>
-                <td>电子邮件:</td>
-                <td>${(admin.email)!}</td>
+                <td></td>
+                <td>欢迎登录~~~</td>
             </tr>
         </table>
     </div>
 </section>
+{{template "base/foot.tpl" .}}
 </body>
 </html>

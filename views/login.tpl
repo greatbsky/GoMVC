@@ -5,6 +5,9 @@
     {{template "base/head.tpl" .}}
     <link rel="stylesheet" type="text/css" href="{{.basecss}}/css/admin/pages/login.css" media="screen" />
     <script type="text/javascript">
+        (function logout() {
+            $.get("{{.apiLogout}}");
+        })();
         $(function(){
             var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
             var isOpera = userAgent.indexOf("Opera") > -1; //判断是否Opera浏览器
@@ -43,8 +46,8 @@
     <section>
         <div class="content">
             <div id="wrapper">
-                <div id="login" class="animate form">
-                    <form id="f_login" action="{{if .apiLogin}}{{.apiLogin}}{{else}}{{.base}}/api/admin/login{{end}}" method="post">
+                <div id="login" class="animate form easyui-panel">
+                    <form id="f_login" action="" method="post">
                         <h1>Log in</h1>
                         <p>
                             <label for="username" class="uname" data-icon="u">管理员ID</label>
@@ -55,13 +58,24 @@
                             <input id="txtpwd" name="password" type="password" required="required"  placeholder="请输入密码" />
                         </p>
                         <p class="login button">
-                            <input type="submit" value="登录" />
+                            <input type="button" value="登录" onclick="submitForm()"  />
                         </p>
                     </form>
+                    <script>
+                        function submitForm() {
+                            console.log($("#f_login").serialize())
+                            $.post("{{if .apiLogin}}{{.apiLogin}}{{else}}{{.baseapi}}/api/admin/login{{end}}", $("#f_login").serialize(), function(data){
+                                if (parseResult(data).success) {
+                                    window.location.assign("{{.base}}/admin/index")
+                                }
+                            });
+                        }
+                    </script>
                 </div>
             </div>
         </div>
     </section>
 </div>
+{{template "base/foot.tpl" .}}
 </body>
 </html>

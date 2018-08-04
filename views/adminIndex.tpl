@@ -22,3 +22,4 @@
     <noframes>对不起，您的浏览器不支持框架元素，请升级!</noframes>
 </frameset>
 </html>
+{{template "base/foot.tpl" .}}

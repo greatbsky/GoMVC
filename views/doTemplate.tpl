@@ -10,5 +10,6 @@
     <h4 id="alert"></h4>
     {{.body}}
 </div>
+{{template "base/foot.tpl" .}}
 </body>
 </html>

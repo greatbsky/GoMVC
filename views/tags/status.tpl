@@ -1,12 +1,12 @@
 {{if .isStart}}
     {{if or (not .attrs.candisable) (contains .attrs.candisable `true`)}}
     <a id="btndisable" href="" class="easyui-linkbutton" data-options=""
-            onclick="statusHandler(this, '{{if .attrs.urldisable}}{{.attrs.urldisable}}{{else}}{{.base}}/api/{{.channel}}/{{.table}}/status/0{{end}}')"
+            onclick="statusHandler(this, '{{if .attrs.urldisable}}{{.attrs.urldisable}}{{else}}{{.baseapi}}/api/{{.channel}}/{{.table}}/status/0{{end}}')"
     >{{if .attrs.namedisable}}{{.attrs.namedisable}}{{else}}冻结{{end}}</a>
     {{end}}
     {{if or (not .attrs.canenable) (contains .attrs.canenable `true`)}}
     <a id="btnenable" href="" class="easyui-linkbutton" data-options=""
-       onclick="statusHandler(this, '{{if .attrs.urlenable}}{{.attrs.urlenable}}{{else}}{{.base}}/api/{{.channel}}/{{.table}}/status/1{{end}}')"
+       onclick="statusHandler(this, '{{if .attrs.urlenable}}{{.attrs.urlenable}}{{else}}{{.baseapi}}/api/{{.channel}}/{{.table}}/status/1{{end}}')"
     >{{if .attrs.nameenable}}{{.attrs.nameenable}}{{else}}解冻{{end}}</a>
     {{end}}
     <div id="dlg-status" class="easyui-dialog" style="{{if .attrs.style}}{{.attrs.style}}{{else}}width:500px; height:240px; padding:10px 20px;{{end}}" title="{0}选中的项" buttons="#dlg-status-btns" data-options="closed:true">

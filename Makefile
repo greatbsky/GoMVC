@@ -9,7 +9,7 @@ deps :
 
 .PHONY: build
 build :
-	go build main.go
+	go build -o goadmin main.go
 
 .PHONY: clean
 clean :
@@ -18,3 +18,8 @@ clean :
 .PHONY: deploy
 deploy : clean
 	mkdir /tmp/mktarget; cp -rf ./* /tmp/mktarget; rm -rf /tmp/mktarget/src && rm -rf /tmp/mktarget/doPages/* && mv /tmp/mktarget ./target
+
+.PHONY: tar
+tar :
+	cd ./target; tar -zvcf goadmin.tar.gz *
+

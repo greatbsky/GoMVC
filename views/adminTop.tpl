@@ -3,8 +3,8 @@
 <head>
     <title>{{.title}}</title>
     {{template "base/head.tpl" .}}
-    <link rel="stylesheet" type="text/css" href="/css/admin/layout.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="/css/admin/right.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="{{.basecss}}/css/admin/layout.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="{{.basecss}}/css/admin/right.css" media="screen" />
     <style type="text/css" media="screen">
         .breadcrumbs_container {position:relative;}
         #messagebar {position:absolute; right:30px; margin:4px 0; border-radius:15px; padding:3px 0; background-position:9px 3px;}
@@ -27,9 +27,10 @@
         <a class="logout_user" href="{{.base}}/login" title="退出">退出</a>
     </div>
     <div class="breadcrumbs_container">
-        <article class="breadcrumbs"><a href="index.html">Website Admin</a> <div class="breadcrumb_divider"></div> <a class="current">Dashboard</a></article>
+        <article class="breadcrumbs"><a href="">Website Admin</a> <div class="breadcrumb_divider"></div> <a class="current">Dashboard</a></article>
         <div id="messagebar"></div>
     </div>
 </section>
+{{template "base/foot.tpl" .}}
 </body>
 </html>

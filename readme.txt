@@ -1,1 +1,1 @@
-go get github.com/astaxie/beegogo get github.com/BurntSushi/tomlgo run main.go
+go get github.com/astaxie/beegogo get github.com/BurntSushi/tomlgo run main.gomake && make tar

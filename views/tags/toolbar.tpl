@@ -14,7 +14,7 @@
     {{end}}
     {{if (or (not .attrs.candel) (contains .attrs.candel "true"))}}
     <a id="btndel" href="" class="easyui-linkbutton" data-options="iconCls:'icon-remove'"
-       onclick="{{if .attrs.onclickdel}}{{.attrs.onclickdel}}{{else}}deleteHandler('{{if .attrs.urldel}}{{.attrs.urldel}}{{else}}{{.base}}/api/{{.channel}}/{{.table}}/delete{{end}}'){{end}}"
+       onclick="{{if .attrs.onclickdel}}{{.attrs.onclickdel}}{{else}}deleteHandler('{{if .attrs.urldel}}{{.attrs.urldel}}{{else}}{{.baseapi}}/api/{{.channel}}/{{.table}}/delete{{end}}'){{end}}"
     >{{if .attrs.titledel}}{{.attrs.titledel}}{{else}}删除{{end}}</a>
     {{end}}
     {{if (or (not .attrs.canview) (contains .attrs.canview `true`))}}

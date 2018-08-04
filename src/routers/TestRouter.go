@@ -4,6 +4,7 @@ import (
 	"../base"
 	"github.com/astaxie/beego"
 	"strconv"
+	"../global"
 )
 
 type TestRouter struct {
@@ -36,15 +37,18 @@ func (this *TestRouter) List() {
 
 
 func (this *TestRouter) CUD() {
-	data := make(map[string]interface{})
-	data["success"] = true
-	this.Data["json"] = data
-	this.ServeJSON()
-
+	this.Success()
 }
 
 func (this *TestRouter) Login() {
-	this.Redirect("/admin/index", 302)
+	this.Ctx.Output.Cookie(global.Conf.Sys.LoginToken, "true")
+	//this.Redirect(global.Conf.Base + "/admin/index", 302)
+	this.Success()
+}
+
+func (this *TestRouter) Logout() {
+	this.Ctx.Output.Cookie(global.Conf.Sys.LoginToken, "true", -1)
+	this.Success()
 }
 
 func init() {
@@ -55,4 +59,5 @@ func init() {
 	beego.Router("/api/:table([\\w]+)/edit", &TestRouter{}, "post:CUD")
 	beego.Router("/api/:table([\\w]+)/status/:status([\\d]+)", &TestRouter{}, "post:CUD")
 	beego.Router("/api/admin/login", &TestRouter{}, "post:Login")
+	beego.Router("/api/admin/logout", &TestRouter{}, "get:Logout")
 }

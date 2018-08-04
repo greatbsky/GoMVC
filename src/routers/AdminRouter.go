@@ -17,7 +17,7 @@ func (this *AdminRouter) Index() {
 }
 
 func (this *AdminRouter) Menu() {
-	doPagesPath := global.Conf.DoPagesPath("menu")
+	doPagesPath := global.Conf.GetDoPageHtmlPath("menu")
 	if utils.File.Exist(doPagesPath) {
 		this.Data["body"] = template.HTML(utils.Template.Execute(doPagesPath, this.Ctx.Input.Data()))
 		this.Show("adminMenu.tpl")

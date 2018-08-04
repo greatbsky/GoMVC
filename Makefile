@@ -17,7 +17,7 @@ clean :
 
 .PHONY: deploy
 deploy : clean
-	mkdir /tmp/mktarget; cp -rf ./* /tmp/mktarget; rm -rf /tmp/mktarget/src && rm -rf /tmp/mktarget/doPages/* && mv /tmp/mktarget ./target
+	mkdir /tmp/mktarget; cp -rf ./* /tmp/mktarget; rm -rf /tmp/mktarget/src && rm -rf /tmp/mktarget/Makefile && rm -rf /tmp/mktarget/main.go && rm -rf /tmp/mktarget/doPages/* && mv /tmp/mktarget ./target
 
 .PHONY: tar
 tar :

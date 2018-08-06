@@ -2,11 +2,12 @@
 <html>
 <head>
     <title>{{.title}}</title>
-    {{template "base/head.tpl" .}}
+{{template "base/head.tpl" .}}
     <link rel="stylesheet" type="text/css" href="{{.basecss}}/css/admin/pages/login.css" media="screen" />
     <script type="text/javascript">
         (function logout() {
-            $.get("{{.apiLogout}}");
+            $.get("{{.base}}/api/admin/logout");
+            $.get("{{.baseapi}}{{.apiLogout}}");
         })();
         $(function(){
             var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
@@ -58,18 +59,24 @@
                             <input id="txtpwd" name="password" type="password" required="required"  placeholder="请输入密码" />
                         </p>
                         <p class="login button">
-                            <input type="button" value="登录" onclick="submitForm()"  />
+                            <span id="errmsg" class="red left"></span><input type="button" value="登录" onclick="submitForm()"  />
                         </p>
                     </form>
                     <script>
                         function submitForm() {
-                            console.log($("#f_login").serialize())
-                            $.post("{{if .apiLogin}}{{.apiLogin}}{{else}}{{.baseapi}}/api/admin/login{{end}}", $("#f_login").serialize(), function(data){
-                                if (parseResult(data).success) {
+                            $.post("{{if .apiLogin}}{{.apiLogin}}{{else}}{{.baseapi}}/api/admin/login{{end}}", $("#f_login").serialize()).done(function(data){
+                                data = parseResult(data)
+                                if (data.success) {
                                     window.location.assign("{{.base}}/admin/index")
+                                    Cookies.set('adminuid', data.result.pn);
+                                } else {
+                                    $("#errmsg").text(data.msg)
                                 }
-                            });
+                            }).fail(function(xhr, status, error) {
+                                $("#errmsg").text("服务端返回结果不正确")
+                            })
                         }
+
                     </script>
                 </div>
             </div>

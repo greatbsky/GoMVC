@@ -8,8 +8,11 @@ type xmlType struct {}
 
 var Xml xmlType
 
-/**
-返回参数s中标签tag之间内容
+/*
+Description: 返回参数s中标签tag之间内容
+
+ * Author: architect.bian
+ * Date: 2018/08/06 16:19
  */
 func (this xmlType) TagContent(s string, tag string) string {
 	var beginTag = "<" + tag + ">"
@@ -19,8 +22,11 @@ func (this xmlType) TagContent(s string, tag string) string {
 	return s[fromPos:toPos]
 }
 
-/**
-抽取tag的属性及返回tag标签
+/*
+Description: 抽取tag的属性及返回tag标签
+
+ * Author: architect.bian
+ * Date: 2018/08/06 16:20
  */
 func (this xmlType) TagAtrrs(html string, tag string, pos int) (eleFragment string, attrFragment string, position int) {
 	var beginTag = "<" + tag

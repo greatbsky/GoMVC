@@ -12,6 +12,12 @@ type DoRouter struct {
 	base.Router
 }
 
+/*
+Description: handler for action request
+
+ * Author: architect.bian
+ * Date: 2018/08/06 16:20
+ */
 func (this *DoRouter) Action() {
 	//adminuid from cookie
 	channel := this.Ctx.Input.Param(":channel")

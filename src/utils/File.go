@@ -6,8 +6,11 @@ type fileType struct {}
 
 var File fileType
 
-/**
-文件是否存在
+/*
+Description: return true if path exist
+
+ * Author: architect.bian
+ * Date: 2018/08/06 16:16
  */
 func (this fileType) Exist(path string) bool {
 	_, err := os.Stat(path)

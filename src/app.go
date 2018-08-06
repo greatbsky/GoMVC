@@ -8,6 +8,12 @@ import (
 	"./utils"
 )
 
+/*
+Description: start up beego with config
+
+ * Author: architect.bian
+ * Date: 2018/08/06 16:15
+ */
 func Run() {
 	beego.LoadAppConfig("ini", "conf/app.conf")
 	// fmt.Println("name ", beego.BConfig.AppName)
@@ -19,6 +25,12 @@ func Run() {
 	beego.Run()
 }
 
+/*
+Description: add funcmap to beego
+
+ * Author: architect.bian
+ * Date: 2018/08/06 16:15
+ */
 func addFuncMap() {
 	for k, v := range utils.Template.FuncMap {
 		beego.AddFuncMap(k, v)

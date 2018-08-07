@@ -5,11 +5,12 @@
 {{template "base/head.tpl" .}}
     <link rel="stylesheet" type="text/css" href="{{.basecss}}/css/admin/pages/login.css" media="screen" />
     <script type="text/javascript">
+
         (function logout() {
             $.get("{{.base}}/api/admin/logout");
             $.get("{{.baseapi}}{{.apiLogout}}");
         })();
-        $(function(){
+        $(function() {
             var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
             var isOpera = userAgent.indexOf("Opera") > -1; //判断是否Opera浏览器
             var isIE = userAgent.indexOf("Trident/7.0") > -1 || userAgent.indexOf("MSIE") > -1 && !isOpera; //判断是否IE浏览器
@@ -59,16 +60,16 @@
                             <input id="txtpwd" name="password" type="password" required="required"  placeholder="请输入密码" />
                         </p>
                         <p class="login button">
-                            <span id="errmsg" class="red left"></span><input type="button" value="登录" onclick="submitForm()"  />
+                            <span id="errmsg" class="red left"></span><input type="button" value="登录" onclick="submitLoginForm()"  />
                         </p>
                     </form>
                     <script>
-                        function submitForm() {
-                            $.post("{{if .apiLogin}}{{.apiLogin}}{{else}}{{.baseapi}}/api/admin/login{{end}}", $("#f_login").serialize()).done(function(data){
+                        function submitLoginForm() {
+                            $.post("{{if .apiLogin}}{{.apiLogin}}{{else}}{{.baseapi}}/api/admin/login{{end}}", $("#f_login").serialize()).done(function(data) {
                                 data = parseResult(data)
                                 if (data.success) {
+                                    Cookies.set('adminuid', data.adminuid);
                                     window.location.assign("{{.base}}/admin/index")
-                                    Cookies.set('adminuid', data.result.pn);
                                 } else {
                                     $("#errmsg").text(data.msg)
                                 }
@@ -76,7 +77,6 @@
                                 $("#errmsg").text("服务端返回结果不正确")
                             })
                         }
-
                     </script>
                 </div>
             </div>

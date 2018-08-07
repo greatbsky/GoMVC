@@ -23,3 +23,11 @@ $(function(){
 <script type="text/javascript" src="{{.basejs}}/js/libs3/js.cookie.min.js"></script>
 <script type="text/javascript" src="{{.basejs}}/js/admin/jslib-1.0.0.js"></script>
 <script type="text/javascript" src="{{.basejs}}/js/admin/base-1.0.0.js"></script>
+<script>
+    $.ajaxSetup({
+        xhrFields: {
+            withCredentials: true
+        },
+        crossDomain: true
+    });
+</script>

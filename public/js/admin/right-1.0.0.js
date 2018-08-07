@@ -27,9 +27,9 @@ function initBreadcrumb() {
 		$("[data-crumb]")
 				.breadcrumb(
 						{
-							target : $(".breadcrumbs", topbody),
-							crumbdivider : '<div class="breadcrumb_divider"></div>',
-							crumbhtml : '<a href="javascript:void(0)" data-scrumb="{index:{index}}">{title}</a>'
+							target: $(".breadcrumbs", topbody),
+							crumbdivider: '<div class="breadcrumb_divider"></div>',
+							crumbhtml: '<a href="javascript:void(0)" data-scrumb="{index:{index}}">{title}</a>'
 						});
 	} catch (e) {
 	}
@@ -61,6 +61,7 @@ function initBindEvent() {
 	$("html").bind("datagrid-onuncheck-event", dgOnUnCheckHandler);
 	$("html").bind("datagrid-oncheckall-event", dgOnCheckAllHandler);
 	$("html").bind("datagrid-onuncheckall-event", dgOnUnCheckAllHandler);
+	$("html").bind("datagrid-onbeforeload-event", dgOnBeforeLoadHandler);
 	$("html").bind("datagrid-onloadsuccess-event", dgOnLoadSuccessHandler);
 	$("html").bind("form-reset-event", formResetHandler);
 	$("html").bind("form-clear-event", formClearHandler);
@@ -77,6 +78,7 @@ function initMyBindEvent() {
 	$("html").bind("datagrid-onuncheck-event", mydgOnUnCheckHandler);
 	$("html").bind("datagrid-oncheckall-event", mydgOnCheckAllHandler);
 	$("html").bind("datagrid-onuncheckall-event", mydgOnUnCheckAllHandler);
+    $("html").bind("datagrid-onbeforeload-event", mydgOnBeforeLoadHandler);
 	$("html").bind("datagrid-onloadsuccess-event", mydgOnLoadSuccessHandler);
 	$("html").bind("form-reset-event", myformResetHandler);
 	$("html").bind("form-clear-event", myformClearHandler);
@@ -90,16 +92,17 @@ function initMyBindEvent() {
  */
 function initDataGridState(dg) {
 	getDataGrid(dg).datagrid({
-		loadFilter : datagrid_loadFilter,
-		onSelect : datagrid_onSelect,
-		onUnselect : datagrid_onUnselect,
-		onSelectAll : datagrid_onSelectAll,
-		onUnSelectAll : datagrid_onUnSelectAll,
-		onCheck : datagrid_onCheck,
-		onUncheck : datagrid_onUncheck,
-		onCheckAll : datagrid_onCheckAll,
-		onUncheckAll : datagrid_onUnCheckAll,
-		onLoadSuccess : datagrid_onLoadSuccess
+		loadFilter: datagrid_loadFilter,
+		onSelect: datagrid_onSelect,
+		onUnselect: datagrid_onUnselect,
+		onSelectAll: datagrid_onSelectAll,
+		onUnSelectAll: datagrid_onUnSelectAll,
+		onCheck: datagrid_onCheck,
+		onUncheck: datagrid_onUncheck,
+		onCheckAll: datagrid_onCheckAll,
+		onUncheckAll: datagrid_onUnCheckAll,
+        onBeforeLoad: datagrid_onBeforeLoad,
+		onLoadSuccess: datagrid_onLoadSuccess
 	});
 }
 /**
@@ -121,7 +124,7 @@ function submit(obj) {
  */
 function clearForm(form) {
 //	var args = {
-//			form : form
+//			form: form
 //		};
 	$("html").trigger("form-clear-event", form);
 	//form.form("clear");
@@ -137,7 +140,7 @@ function clearForm(form) {
 function resetForm(obj) {
 	if(confirm("确定重置所有数据吗？")){
 		var args = {
-			obj : obj
+			obj: obj
 		};
 		$("html").trigger("form-reset-event", args);
 	}
@@ -314,7 +317,7 @@ function initStatusForm(dg, statusform) {
  */
 function status_submitHandler(obj, dg, dlg, statusform) {
 	getStatusForm(statusform).form('submit', {
-		success : function(str) {
+		success: function(str) {
 			var result = $.parseJSON(str);
 			if (result.success) {
 				getDataGrid(dg).datagrid("reload"); // 重新加载数据表格
@@ -419,7 +422,7 @@ function freshRowHandler(obj, dg, form, data, i) {
  */
 function submitHandler(obj, dg) {
 	$(obj).parents("form").form('submit', {
-		success : function(str) {
+		success: function(str) {
 			var result = $.parseJSON(str);
 			if (result.success || result.addSuccess || result.editSuccess) {
 				getDataGrid(dg).datagrid("reload"); // 重新加载数据表格
@@ -468,8 +471,7 @@ function doactionHandler(obj, uri, confirm, needselection, dg) {
  * datagrid加载数据成功后重新初始化数据
  */
 function datagrid_loadFilter(data) {
-	initDGData(data.rows);
-	return data;
+	return initDGData(data);
 }
 /**
  * datagrid的选择事件，若需要增加额外的处理方法，可以$("html").bind("datagrid-onselect-event",
@@ -477,9 +479,9 @@ function datagrid_loadFilter(data) {
  */
 function datagrid_onSelect(index, data) {
 	var args = {
-		'dg' : "#{0}".format($(this).datagrid("options").id),
-		'index' : index,
-		'data' : data
+		'dg': "#{0}".format($(this).datagrid("options").id),
+		'index': index,
+		'data': data
 	};
 	$("html").trigger("datagrid-onselect-event", args);
 }
@@ -491,9 +493,9 @@ function datagrid_onSelect(index, data) {
  */
 function datagrid_onUnselect(index, data) {
 	var args = {
-		'dg' : "#{0}".format($(this).datagrid("options").id),
-		'index' : index,
-		'data' : data
+		'dg': "#{0}".format($(this).datagrid("options").id),
+		'index': index,
+		'data': data
 	};
 	$("html").trigger("datagrid-onunselect-event", args);
 }
@@ -503,8 +505,8 @@ function datagrid_onUnselect(index, data) {
  */
 function datagrid_onSelectAll(rows) {
 	var args = {
-			'dg' : "#{0}".format($(this).datagrid("options").id),
-			'rows' : rows,
+			'dg': "#{0}".format($(this).datagrid("options").id),
+			'rows': rows,
 		};
 	$("html").trigger("datagrid-onselectall-event", args);
 }
@@ -514,8 +516,8 @@ function datagrid_onSelectAll(rows) {
  */
 function datagrid_onUnSelectAll(rows) {
 	var args = {
-			'dg' : "#{0}".format($(this).datagrid("options").id),
-			'rows' : rows,
+			'dg': "#{0}".format($(this).datagrid("options").id),
+			'rows': rows,
 		};
 	$("html").trigger("datagrid-onunselectall-event", args);
 }
@@ -526,9 +528,9 @@ function datagrid_onUnSelectAll(rows) {
  */
 function datagrid_onCheck(index, data) {
 	var args = {
-		'dg' : "#{0}".format($(this).datagrid("options").id),
-		'index' : index,
-		'data' : data
+		'dg': "#{0}".format($(this).datagrid("options").id),
+		'index': index,
+		'data': data
 	};
 	$("html").trigger("datagrid-oncheck-event", args);
 }
@@ -539,9 +541,9 @@ function datagrid_onCheck(index, data) {
  */
 function datagrid_onUncheck(index, data) {
 	var args = {
-		'dg' : "#{0}".format($(this).datagrid("options").id),
-		'index' : index,
-		'data' : data
+		'dg': "#{0}".format($(this).datagrid("options").id),
+		'index': index,
+		'data': data
 	};
 	$("html").trigger("datagrid-onuncheck-event", args);
 }
@@ -551,8 +553,8 @@ function datagrid_onUncheck(index, data) {
  */
 function datagrid_onCheckAll(rows) {
 	var args = {
-			'dg' : "#{0}".format($(this).datagrid("options").id),
-			'rows' : rows,
+			'dg': "#{0}".format($(this).datagrid("options").id),
+			'rows': rows,
 		};
 	$("html").trigger("datagrid-oncheckall-event", args);
 }
@@ -562,10 +564,26 @@ function datagrid_onCheckAll(rows) {
  */
 function datagrid_onUnCheckAll(rows) {
 	var args = {
-			'dg' : "#{0}".format($(this).datagrid("options").id),
-			'rows' : rows,
+			'dg': "#{0}".format($(this).datagrid("options").id),
+			'rows': rows,
 		};
 	$("html").trigger("datagrid-onuncheckall-event", args);
+}
+
+/**
+ * 第二次加载数据
+ * @param param
+ * @returns {boolean}
+ */
+function datagrid_onBeforeLoad(param) {
+    var firstLoad = $(this).attr("firstLoad");
+    if (firstLoad == "false" || typeof (firstLoad) == "undefined")
+    {
+        $(this).attr("firstLoad","true");
+        return false;
+    }
+    $("html").trigger("datagrid-onbeforeload-event", param);
+    return true; //第二次加载
 }
 /**
  * datagrid加载成功事件
@@ -574,9 +592,9 @@ function datagrid_onUnCheckAll(rows) {
  */
 function datagrid_onLoadSuccess(data) {
 	var args = {
-			'dg' : "#{0}".format($(this).datagrid("options").id),
-			'index' : 0,
-			'data' : data
+			'dg': "#{0}".format($(this).datagrid("options").id),
+			'index': 0,
+			'data': data
 	};
 	$("html").trigger("datagrid-onloadsuccess-event", args);
 }
@@ -640,8 +658,16 @@ function dgOnUnCheckAllHandler() {
  * 重新初始化datagrid的row数据
  * @param data
  */
-function initDGData(row) {
-	
+function initDGData(data) {
+	return parseResult(data);
+}
+/**
+ * datagrid加载数据之前的操作
+ * @param event
+ * @param j
+ */
+function dgOnBeforeLoadHandler(event, j) {
+
 }
 /**
  * datagrid加载数据成功时对应状态按钮的操作
@@ -1069,7 +1095,13 @@ function isLastRow(dg, row) {
 	return false;
 }
 /////////////////////////////////////////////////////////////////以下是可自定义可重写的方法/////////////////////////////////////////////////////////////////
-
+/**
+ * 解析返回结果，每个项目规范不一致
+ * @param data
+ */
+function parseResult(data) {
+    return data
+}
 /**
  * 自定义toolbar工具栏按钮状态的处理方法
  */
@@ -1081,9 +1113,9 @@ function mytoolbarStateHandler(event, j) {
  * 自定义处理方法，针对功能重写此方法
  * 触发事件时的参数：
  * var args = {
-		'dg' : "#{0}".format($(this).datagrid("options").id),
-		'index' : index,
-		'data' : data
+		'dg': "#{0}".format($(this).datagrid("options").id),
+		'index': index,
+		'data': data
 	};
 	$("html").trigger("datagrid-onunselect-event", args);
 	重写举例：
@@ -1099,6 +1131,7 @@ function mydgOnCheckHandler(event, j){}
 function mydgOnUnCheckHandler(event, j){}
 function mydgOnCheckAllHandler(event, j){}
 function mydgOnUnCheckAllHandler(event, j){}
+function mydgOnBeforeLoadHandler(event, j){}
 function mydgOnLoadSuccessHandler(event, j){}
 function myformResetHandler(event, j){}
 function myformClearHandler(event, j){}

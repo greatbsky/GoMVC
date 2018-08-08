@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{{.basecss}}/css/admin/right.css" media="screen" />
     <style type="text/css" media="screen">
         .breadcrumbs_container {position:relative;}
-        #messagebar {position:absolute; right:30px; margin:4px 0; border-radius:15px; padding:3px 0; background-position:9px 3px;}
+        #messagebar {position:absolute; right:30px; margin:4px 0; border-radius:15px; padding:3px 0; padding-right:9px; background-position:9px 3px;}
     </style>
     <script type="text/javascript">
         <!--

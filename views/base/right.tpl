@@ -55,12 +55,12 @@
         });
     }
 
-    //面包屑
-    $(function(){
-        try {
-            $("[data-crumb]").breadcrumb({target:$(".breadcrumbs", window.parent.frames.topbar.document.body),crumbdivider:'<div class="breadcrumb_divider"></div>',crumbhtml:'<a href="javascript:void(0)" data-scrumb="{index:{index}}">{title}</a>'});
-        } catch(e){}
-    });
+    //面包屑 已在right.js调用
+    // $(function(){
+    //     try {
+    //         $("[data-crumb]").breadcrumb({target:$(".breadcrumbs", window.parent.frames.topbar.document.body),crumbdivider:'<div class="breadcrumb_divider"></div>',crumbhtml:'<a href="javascript:void(0)" data-scrumb="{index:{index}}">{title}</a>'});
+    //     } catch(e){}
+    // });
 
     // gridid:数据表格id  dlgid:窗口id
     function openeditdlg(gridid,dlgid,url){

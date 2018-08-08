@@ -24,15 +24,12 @@ function initBreadcrumb() {
 		topbody = window.parent.frames.topbar.document.body;
 	}
 	try {
-		$("[data-crumb]")
-				.breadcrumb(
-						{
+		$("[data-crumb]").breadcrumb({
 							target: $(".breadcrumbs", topbody),
 							crumbdivider: '<div class="breadcrumb_divider"></div>',
 							crumbhtml: '<a href="javascript:void(0)" data-scrumb="{index:{index}}">{title}</a>'
 						});
-	} catch (e) {
-	}
+	} catch (e) {}
 }
 function initEasyUI() {
 	// $('.easyui-tooltip').tooltip({
@@ -214,6 +211,7 @@ function editBefore(obj, dg, editform, urls, i) {
 	if (urls != null && urls.length > 0 && i < urls.length) {
 		var url = urls[i];
 		$.get(url, function(data) {
+            data = parseResult(data);
 			freshRowHandler(obj, dg, editform, data, i);
 			i++;
 			if (i < urls.length) {
@@ -422,8 +420,11 @@ function freshRowHandler(obj, dg, form, data, i) {
  */
 function submitHandler(obj, dg) {
 	$(obj).parents("form").form('submit', {
-		success: function(str) {
-			var result = $.parseJSON(str);
+		success: function(data) {
+            if (typeof data == "string" && data.length > 2) {
+                data = $.parseJSON(data);
+			}
+            var result = parseResult(data);
 			if (result.success || result.addSuccess || result.editSuccess) {
 				getDataGrid(dg).datagrid("reload"); // 重新加载数据表格
 				clearForm($(obj).parents("form"));
@@ -776,16 +777,24 @@ function getSearchIcon() {
  * @param section
  * @returns
  */
-function getAddForm(section) {
-	return $("form", section);
+function getAddForm(id) {
+    if (id) {
+    } else {
+        id = "#addform"
+    }
+	return $(id);
 }
 /**
  * 获取editform对象，若editform的id不是editform，则可以重写此方法
  * 
  * @param section
  */
-function getEditForm(section) {
-	return $("form", section);
+function getEditForm(id) {
+    if (id) {
+    } else {
+        id = "#editform"
+    }
+    return $(id);
 }
 /**
  * 获取viewform对象，若viewform的id不是viewform，则可以重写此方法
@@ -793,8 +802,12 @@ function getEditForm(section) {
  * @param section
  * @returns
  */
-function getViewForm(section) {
-	return $("form", section);
+function getViewForm(id) {
+    if (id) {
+    } else {
+        id = "#viewform"
+    }
+    return $(id);
 }
 /**
  * 获取修改状态的表单
@@ -1009,8 +1022,11 @@ function getBtnExport() {
  */
 function initFormData(form, data) {
 	form.form('load', data);
+    needSetDefaultCheckedAfterFormLoad($("input[type=radio]", form), form)
+    needSetDefaultCheckedAfterFormLoad($("input[type=checkbox]", form), form)
 	form.set(data);
 }
+
 /**
  * 返回在编辑、查看时需要调用ajax的多个urls，若返回含有多项的数组，则会多次调用ajax请求
  * 
@@ -1096,13 +1112,30 @@ function isLastRow(dg, row) {
 	}
 	return false;
 }
+
+/**
+ * form load后如果没有选中则重新设置radio checkbox的默认选项
+ * @param eles
+ * @param form
+ */
+function needSetDefaultCheckedAfterFormLoad(eles, form) {
+    if (eles.length > 0) {
+        for(var i = 0; i < eles.length; i++) {
+            var item = eles[i]
+            if ($('input[name=' + $(item).attr("name") + ']:checked', form).length == 0) {
+                if (item.outerHTML.indexOf("checked") > 0) {
+                    $(item).attr("checked", "checked")
+                }
+            }
+        }
+    }
+}
 /////////////////////////////////////////////////////////////////以下是可自定义可重写的方法/////////////////////////////////////////////////////////////////
 /**
  * 解析返回结果，每个项目规范不一致
  * @param data
  */
 function parseResult(data) {
-	alert(1)
     return data
 }
 /**

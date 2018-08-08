@@ -1,7 +1,7 @@
 {{if .isStart}}
     <section id="{{if .attrs.id}}{{.attrs.id}}{{else}}editsection{{end}}" class="hd">
     <form id="{{if .attrs.editformid}}{{.attrs.editformid}}{{else}}editform{{end}}" method="post"
-          {{if not .attrs.action}}action="{{.baseapi}}/api/{{.channel}}/{{.table}}/edit"{{end}}
+            action="{{if .attrs.action}}{{.attrs.action}}{{else}}{{.baseapi}}/api/{{.channel}}/{{.table}}/edit{{end}}"
           enctype="multipart/form-data">
     <table class="ftable">
 {{else}}

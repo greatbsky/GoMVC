@@ -59,9 +59,7 @@
         <th data-options="field:'e', width: 1">操作人</th>
     </datagrid>
 
-    <toolbar canadd="false" canview="false" candel="false" titleedit="操作">
-        <doaction id="refuse" action="{{.baseapi}}/api/refxxx/delete" confirm="true">拒绝</doaction>
-        <doaction id="recover" action="{{.baseapi}}/api/refxxx/delete" confirm="true">恢复</doaction>
+    <toolbar canadd="false" canview="false" candel="false" titleedit="转账操作">
     </toolbar>
     <tools></tools>
 </section>
@@ -103,6 +101,13 @@
     </tr>
     <tr>
         <td>矿工费:</td><td><span set-key="d"></span></td>
+    </tr>
+    <tr>
+        <td><label>审核结果: </label></td>
+        <td>
+            <input id="agree" type="radio" name="status" value="true"/><label for="agree">同意转账</label>
+            <input id="refuse" type="radio" name="status" value="false"/><label for="refuse">拒绝转账</label>
+        </td>
     </tr>
     <tr>
         <td>交易Hash:</td>

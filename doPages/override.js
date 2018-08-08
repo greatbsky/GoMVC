@@ -26,7 +26,6 @@ function parseResult(data) {
         result.msg = "服务端返回结果不正确"
     }
     if (typeof data.result != "undefined") {
-        console.log(typeof data.result)
         result.rows = data.result.data
         result.total = data.result.total
         result.adminuid = data.result.pn

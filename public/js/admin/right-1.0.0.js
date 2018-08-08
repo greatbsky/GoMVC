@@ -471,7 +471,9 @@ function doactionHandler(obj, uri, confirm, needselection, dg) {
  * datagrid加载数据成功后重新初始化数据
  */
 function datagrid_loadFilter(data) {
-	return initDGData(data);
+    data = parseResult(data);
+	initDGData(data.rows);
+	return data
 }
 /**
  * datagrid的选择事件，若需要增加额外的处理方法，可以$("html").bind("datagrid-onselect-event",
@@ -659,7 +661,7 @@ function dgOnUnCheckAllHandler() {
  * @param data
  */
 function initDGData(data) {
-	return parseResult(data);
+	return data;
 }
 /**
  * datagrid加载数据之前的操作
@@ -1100,6 +1102,7 @@ function isLastRow(dg, row) {
  * @param data
  */
 function parseResult(data) {
+	alert(1)
     return data
 }
 /**

@@ -1130,6 +1130,28 @@ function needSetDefaultCheckedAfterFormLoad(eles, form) {
         }
     }
 }
+
+/**
+ * 恢复属性为attrKey标签里的元素
+ * @param attrKey
+ */
+function restoreElements(attrKey) {
+    $("[" + attrKey + "]").each(function() {
+        $(this).append(g[attrKey][$(this).attr("' + attrKey + '")])
+    })
+}
+
+/**
+ * 剥离属性为attrKey标签里的元素
+ * @param attrKey
+ */
+function detachElements(attrKey) {
+    g[attrKey] = {} //g为页面代码定义的全局变量
+    $("[" + attrKey + "]").each(function() {
+        g[attrKey][$(this).attr("' + attrKey + '")] = $(this).children()
+        $(this).children().detach()
+    })
+}
 /////////////////////////////////////////////////////////////////以下是可自定义可重写的方法/////////////////////////////////////////////////////////////////
 /**
  * 解析返回结果，每个项目规范不一致

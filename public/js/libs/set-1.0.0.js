@@ -98,8 +98,10 @@
 			 }
 		 } else if(obj.is(":input")) {
 			 obj.val(v);
-		 } else if(obj.is("img")) {
-			 obj.attr("src", v);
+         } else if(obj.is("img")) {
+             obj.attr("src", v);
+         } else if(obj.is("a")) {
+             obj.attr("href", v);
 		 } else {
 			 obj.html(v);
 		 }

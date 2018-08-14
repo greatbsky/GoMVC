@@ -1137,8 +1137,9 @@ function needSetDefaultCheckedAfterFormLoad(eles, form) {
  */
 function restoreElements(attrKey) {
     $("[" + attrKey + "]").each(function() {
-        $(this).append(g[attrKey][$(this).attr("' + attrKey + '")])
+        $(this).append(g[attrKey][$(this).attr(attrKey)])
     })
+	delete g[attrKey];
 }
 
 /**
@@ -1146,9 +1147,10 @@ function restoreElements(attrKey) {
  * @param attrKey
  */
 function detachElements(attrKey) {
+	if (g[attrKey]) return;
     g[attrKey] = {} //g为页面代码定义的全局变量
     $("[" + attrKey + "]").each(function() {
-        g[attrKey][$(this).attr("' + attrKey + '")] = $(this).children()
+        g[attrKey][$(this).attr(attrKey)] = $(this).children()
         $(this).children().detach()
     })
 }

@@ -14,6 +14,8 @@ type ConfType struct {
 	BaseJs  string
 	BaseImg string
 	BaseApi string
+	UserImg string
+	WebImg string
 	Domain  string
 
 	API APIType

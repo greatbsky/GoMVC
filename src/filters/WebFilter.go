@@ -33,6 +33,8 @@ func initData(ctx *context.Context) {
 	ctx.Input.SetData("basejs", global.Conf.BaseJs)
 	ctx.Input.SetData("baseimg", global.Conf.BaseImg)
 	ctx.Input.SetData("baseapi", global.Conf.BaseApi)
+	ctx.Input.SetData("userimg", global.Conf.UserImg)
+	ctx.Input.SetData("webimg", global.Conf.WebImg)
 	ctx.Input.SetData("domain", global.Conf.Domain)
 	ctx.Input.SetData("api", global.Conf.API)
 }

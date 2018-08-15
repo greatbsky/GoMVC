@@ -1,5 +1,7 @@
-﻿function debug(str) {
-	$("body").prepend(str);
+﻿function debug(d) {
+    if ($("html").data("log.level") == "debug") {
+        console.log(d);
+    }
 }
 /**
  * 删除字符串两边的空白

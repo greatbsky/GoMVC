@@ -1,4 +1,4 @@
-﻿var g = {};
+﻿﻿var g = g || {};
 g.ismozilla = /firefox/.test(navigator.userAgent.toLowerCase());
 $(function(){
 	//setBaseCssForInput();

@@ -9,7 +9,7 @@
 <script type="text/javascript" src="{{.basejs}}/js/admin/right-1.0.0.js"></script>
 <script type="text/javascript">
     <!--
-    var g = {};
+    ﻿var g = g || {};
     g.base = "{{.base}}";
     g.baseuri = g.base;
     $(function(){

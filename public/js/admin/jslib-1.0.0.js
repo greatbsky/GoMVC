@@ -77,11 +77,3 @@ function orderbyHandler() {
 	gourl(tourl + "?" + param);
 	return false;
 }
-
-function webLog(str) {
-	try{
-		if(window.console&&window.console.log){
-			console.log(str)
-		}
-	} catch (e){};
-}

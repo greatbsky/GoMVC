@@ -71,9 +71,11 @@
                                     Cookies.set('adminuid', data.adminuid);
                                     window.location.assign("{{.base}}/admin/index")
                                 } else {
+                                    console.log(data);
                                     $("#errmsg").text(data.msg)
                                 }
                             }).fail(function(xhr, status, error) {
+                                console.log(data);
                                 $("#errmsg").text("服务端返回结果不正确")
                             })
                         }

@@ -47,19 +47,20 @@
         </tr>
     </search>
 
-    <datagrid title="提币列表" url="{{.baseapi}}/api/admin/withdrawList">
-        <th data-options="field:'uid'">用户账号</th>
-        <th data-options="field:'outer_address'">提币地址</th>
-        <th data-options="field:'c'">提币手续费</th>
+    <datagrid title="提币列表" url="{{.base}}/js/api/btc/list.json">
+        <th data-options="field:'a'">账号</th>
+        <th data-options="field:'b'">提币地址</th>
+        <th data-options="field:'c'">手续费</th>
         <th data-options="field:'c'">矿工费</th>
-        <th data-options="field:'tx_id'">交易Hash</th>
-        <th data-options="field:'status'">提币状态</th>
-        <th data-options="field:'d'">申请时间</th>
-        <th data-options="field:'d'">转账时间</th>
+        <th data-options="field:'c'">交易Hash</th>
+        <th data-options="field:'d'">提币状态</th>
+        <th data-options="field:'d'">时间</th>
         <th data-options="field:'e', width: 1">操作人</th>
     </datagrid>
 
-    <toolbar canadd="false" canview="false" candel="false" titleedit="转账操作">
+    <toolbar canadd="false" canview="false" candel="false" titleedit="操作">
+        <doaction id="refuse" action="{{.baseapi}}/api/refxxx/delete" confirm="true">拒绝</doaction>
+        <doaction id="recover" action="{{.baseapi}}/api/refxxx/delete" confirm="true">恢复</doaction>
     </toolbar>
     <tools></tools>
 </section>
@@ -101,13 +102,6 @@
     </tr>
     <tr>
         <td>矿工费:</td><td><span set-key="d"></span></td>
-    </tr>
-    <tr>
-        <td><label>审核结果: </label></td>
-        <td>
-            <input id="agree" type="radio" name="status" value="true"/><label for="agree">同意转账</label>
-            <input id="refuse" type="radio" name="status" value="false"/><label for="refuse">拒绝转账</label>
-        </td>
     </tr>
     <tr>
         <td>交易Hash:</td>

@@ -17,12 +17,13 @@ $(function(){
 <![endif]-->
 <script type="text/javascript" src="{{.basejs}}/js/jquery/jquery-1.9.0.min.js"></script>
 <script type="text/javascript" src="{{.basejs}}/js/jquery/jquery-migrate-1.0.0.min.js"></script>
+<script type="text/javascript" src="{{.basejs}}/js/base-1.0.0.js"></script>
+<script type="text/javascript" src="{{.basejs}}/js/config-1.0.0.js"></script>
 <script type="text/javascript" src="{{.basejs}}/js/jslib-1.0.0.js"></script>
 <script type="text/javascript" src="{{.basejs}}/js/admin/jslib-1.0.0.js"></script>
 <script type="text/javascript" src="{{.basejs}}/js/libs/serializeObj-1.0.0.js"></script>
 <script type="text/javascript" src="{{.basejs}}/js/libs3/js.cookie.min.js"></script>
 <script type="text/javascript" src="{{.basejs}}/js/admin/jslib-1.0.0.js"></script>
-<script type="text/javascript" src="{{.basejs}}/js/admin/base-1.0.0.js"></script>
 <script>
     $.ajaxSetup({
         xhrFields: {

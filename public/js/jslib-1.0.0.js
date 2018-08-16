@@ -1,8 +1,10 @@
-﻿function debug(d) {
-    if ($("html").data("log.level") == "debug") {
-        console.log(d);
+﻿var consoleLog = console.log
+console.log = function(d) {
+    if ($("html").data("log.level") == "debug" || (g.log && g.log.level == "debug")) {
+        consoleLog(d);
     }
 }
+
 /**
  * 删除字符串两边的空白
  */

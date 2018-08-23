@@ -16,6 +16,8 @@
  * }
  */
 function parseResult(data) {
+    console.log("parseResult(data):")
+    console.log(data)
     var result = data
     if (data.errorCode == 0) {
         result.success = true

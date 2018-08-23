@@ -55,9 +55,13 @@ func init() {
 	beego.Router("/api/:table([\\w]+)/list", &TestRouter{}, "get:List")
 	beego.Router("/api/:channel([\\w]+)/:table([\\w]+)/list", &TestRouter{}, "get:List")
 	beego.Router("/api/:table([\\w]+)/add", &TestRouter{}, "post:CUD")
+	beego.Router("/api/:channel([\\w]+)/:table([\\w]+)/add", &TestRouter{}, "post:CUD")
 	beego.Router("/api/:table([\\w]+)/delete", &TestRouter{}, "get:CUD")
+	beego.Router("/api/:channel([\\w]+)/:table([\\w]+)/delete", &TestRouter{}, "get:CUD")
 	beego.Router("/api/:table([\\w]+)/edit", &TestRouter{}, "post:CUD")
+	beego.Router("/api/:channel([\\w]+)/:table([\\w]+)/edit", &TestRouter{}, "post:CUD")
 	beego.Router("/api/:table([\\w]+)/status/:status([\\d]+)", &TestRouter{}, "post:CUD")
+	beego.Router("/api/:channel([\\w]+)/:table([\\w]+)/status/:status([\\d]+)", &TestRouter{}, "post:CUD")
 	beego.Router("/api/admin/login", &TestRouter{}, "post:Login")
 	beego.Router("/api/admin/logout", &TestRouter{}, "get:Logout")
 }

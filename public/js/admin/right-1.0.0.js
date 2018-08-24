@@ -1079,6 +1079,8 @@ function resultHandler(result) {
 		err('操作密码错误！');
 	} else if (result.err) {
 		err("系统出现错误：{0}".format(result.errmsg));
+    } else if (result.msg) {
+        err("系统出现错误：{0}".format(result.msg));
 	} else {
 		err('操作失败！');
 	}

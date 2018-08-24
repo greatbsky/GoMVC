@@ -79,3 +79,4 @@ color: #32510F;
 padding: 8px 0;
 text-indent: 40px;
 font-size: 14px;}
+.datagrid-toolbar {position: static !important;} /*easyui bug*/

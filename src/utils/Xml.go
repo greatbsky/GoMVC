@@ -2,6 +2,7 @@ package utils
 
 import (
 	"strings"
+	"fmt"
 )
 
 type xmlType struct {}
@@ -15,9 +16,17 @@ Description: 返回参数s中标签tag之间内容
  * Date: 2018/08/06 16:19
  */
 func (this xmlType) TagContent(s string, tag string) string {
-	var beginTag = "<" + tag + ">"
+	var beginTag = "<" + tag
 	var endTag = "</" + tag + ">"
-	fromPos := strings.Index(s, beginTag) + len(beginTag)
+	fromPos := strings.Index(s, beginTag)
+	var beginTagEnd = ">"
+	for ; fromPos < len(s); fromPos++ {
+		if s[fromPos:fromPos +len(beginTagEnd)] == beginTagEnd {
+			fmt.Println(s[fromPos:fromPos +len(beginTagEnd)])
+			fromPos++
+			break
+		}
+	}
 	toPos := strings.Index(s, endTag)
 	return s[fromPos:toPos]
 }

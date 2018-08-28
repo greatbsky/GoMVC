@@ -5,7 +5,7 @@
 {{else}}
         </table>
         <div class="formbtns">
-            <a href="" class="easyui-linkbutton" data-options="iconCls:'icon-back'" data-crumbreturn="">返回</a>
+            <a id="btnreturnview" href="" class="easyui-linkbutton" data-options="iconCls:'icon-back'" data-crumbreturn="">返回</a>
         </div>
     </form>
     </section>

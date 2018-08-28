@@ -1138,9 +1138,11 @@ function needSetDefaultCheckedAfterFormLoad(eles, form) {
  * @param attrKey
  */
 function restoreElements(attrKey) {
-    $("[" + attrKey + "]").each(function() {
-        $(this).append(g[attrKey][$(this).attr(attrKey)])
-    })
+	if (g[attrKey]) {
+		$("[" + attrKey + "]").each(function() {
+			$(this).append(g[attrKey][$(this).attr(attrKey)])
+		})
+	}
 	delete g[attrKey];
 }
 

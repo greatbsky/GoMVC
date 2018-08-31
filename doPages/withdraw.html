@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{.title}}</title>
+    <style type="text/css">
+     body {min-width:1500px }
+    </style>
+    <script type="text/javascript" src="{{.basejs}}/js/libs3/qrcode.min.js"></script>
+    <script type="text/javascript">
+    var adminid = Cookies.get('adminid');
+    var minefee = Cookies.get('cfg.minefee{{.table}}');
+    var qrcode;
+    var editing = false;
+    var refresh = function() {
+        if (!editing) {
+            getDataGrid().datagrid("reload")
+        }
+    }
+    $(function() {
+        qrcode = new QRCode("qrcode")
+        setInterval('refresh()', 10000)
+    });
+        function initDGData(data) {
+            for(var item of data) {
+                item.balance = item.balance - item.withdraw_fee;
+                item.minerFee = item.miner_fee
+                switch(item.status) {
+                    case "1":
+                        item.statusName = "提交";
+                        break;
+                    case "2":
+                        item.statusName = "同意";
+                        break;
+                    case "3":
+                        item.statusName = "拒绝";
+                        break;
+                    case "5":
+                        item.statusName = "已完成";
+                        break;
+                }
+            }
+        	return data;
+        }
+        function getFreshRowUrls(dg) {
+            var row = getSelected(dg);
+            var urls = new Array();
+            urls.push("{{.baseapi}}/api/admin/withdrawList?token={{.table}}&uid={0}".format(row.uid));
+            urls.push("{{.baseapi}}/api/admin/getUserInfo?uid={0}".format(row.uid));
+            urls.push("{{.baseapi}}/api/admin/getUserKyc?uid={0}".format(row.uid));
+            return urls;
+        }
+
+        function freshRow(row, data, i) {
+            if (i == 0) {
+                row.detail = initDGData(data.rows);
+                hide('#tabwithdraw')
+            }
+            if (i == 1) {
+                row.userInfo = data.result
+                switch(row.userInfo.idCardStatus) {
+                    case "0":
+                        row.userInfo.idCardStatusName = "未验证";
+                        break;
+                    case "1":
+                        row.userInfo.idCardStatusName = "审核中";
+                        break;
+                    case "2":
+                        row.userInfo.idCardStatusName = "已通过";
+                        break;
+                    case "3":
+                        row.userInfo.idCardStatusName = "被驳回";
+                        break;
+                }
+            }
+            if (i == 2) {
+                row.userKYC = data.result
+                switch(row.userKYC.type) {
+                    case "1":
+                        row.userKYC.typeName = "身份证";
+                        break;
+                    case "2":
+                        row.userKYC.typeName = "护照";
+                        break;
+                }
+                switch(row.userKYC.status) {
+                    case "0":
+                        row.userKYC.statusName = "未验证";
+                        break;
+                    case "1":
+                        row.userKYC.statusName = "审核中";
+                        break;
+                    case "2":
+                        row.userKYC.statusName = "通过";
+                        break;
+                    case "3":
+                        row.userKYC.statusName = "被驳回";
+                        break;
+                }
+            }
+        }
+
+        function editAfter(obj, dg, editform) {
+            editing = true;
+            $('#list4user').datagrid({
+                data: getSelected(dg).detail
+            });
+            $.post("{{.baseapi}}/api/admin/withdrawLock", {id: getSelected(dg).id}, function(data) { //锁定
+                ok("锁定");
+                $("#editform .formbtns .easyui-linkbutton:eq(1)").click(function(){ //返回按钮，清空表单
+                    $.post("{{.baseapi}}/api/admin/withdrawUnlock", {id: getSelected(dg).id}, function(data) {
+                        ok("解锁");
+                    })
+                    restoreElements('eleid');restoreElements('refuseid'); //恢复表单
+                    qrcode.clear();
+                    editing = false;
+                })
+            })
+            var row = getSelected(dg);
+            if (row.status == 2 || row.status == 3 || row.status == 5 || (row.lck == "1" && row.lcker != adminid)) {// 已操作，同意或拒绝
+                $("[onclick='submitHandler(this)']").linkbutton("disable");
+            } else {
+                $("[onclick='submitHandler(this)']").linkbutton("enable");
+            }
+            if(row.status == 3) { // 拒绝
+                eval($("#refuse").attr("onchange"))
+            } else { //其他
+                eval($("#agree").attr("onchange"))
+            }
+            //二维码
+            qrcode.clear();
+            var qrvalue = row.outer_address;
+            if (row.type == "BTC" || row.type == "BCH") {
+                qrvalue += "\t\t"
+            } else if (row.type == "ETH" || row.type == "USDT") {
+                qrvalue += "\t"
+            }
+            if (row.type != "BTC") {
+                qrvalue += row.balance
+            }
+            qrcode.makeCode(qrvalue);
+            //默认矿工费
+            if(row.minerFee == "" || Number(row.minerFee) <= 0) {
+                $("#txtminefee").val(minefee)
+            }
+        }
+
+        function toolbarStateHandler(event, j) {
+        	var list = getSelections(j.dg);
+        	if (list.length == 0) {
+        		getBtnEdit().linkbutton("disable");
+        	} else {
+        		var row = list[0];
+                console.log(row);
+        		getBtnEdit().linkbutton("enable");
+                if(row.status == 1) { //提交状态
+                    if(row.lck == "1" && row.lcker != adminid) {//已锁定
+                        getBtnEdit().linkbutton("disable");
+                    }
+                }
+        	}
+        }
+
+        function mySearchAfterHandler(obj, dg, searchform) { //导出
+            getSearchForm(searchform).serializeObj()
+            if (!$("#btnexport").data("href")) {
+                $("#btnexport").data("href", $("#btnexport").attr("href"))
+            }
+            $("#btnexport").attr("href", $("#btnexport").data("href") + getSearchForm(searchform).serialize())
+        }
+    </script>
+</head>
+<body>
+<section>
+    <search>
+        <tr>
+            <td>ID:</td>
+            <td colspan="3">
+                <input id="id" name="id" type="text" /></td>
+            <td>提币地址:</td>
+            <td colspan="3">
+                <input id="outer_address" name="outerAddress" type="text" /></td>
+            <td>申请时间：</td>
+            <td colspan="3">
+                <input class="easyui-datetimebox" name="createMin" data-options="showSeconds:false" value="" style="width:150px"> --
+                <input class="easyui-datetimebox" name="createMax" data-options="showSeconds:false" value="" style="width:150px">
+                </td>
+        </tr>
+        <tr>
+            <td>用户账号:</td>
+            <td colspan="3">
+                <input id="uid" name="uid" type="text" /></td>
+            <td>交易Hash:</td>
+            <td colspan="3">
+                <input id="tx_id" name="txId" type="text" /></td>
+            <td>转账时间：</td>
+            <td colspan="3">
+                <input class="easyui-datetimebox" name="updateMin" data-options="showSeconds:false" value="" style="width:150px"> --
+                <input class="easyui-datetimebox" name="updateMax" data-options="showSeconds:false" value="" style="width:150px">
+                </td>
+        </tr>
+        <tr>
+            <td>操作人:</td>
+            <td colspan="3">
+                <input id="operator" name="operatorId" type="text" /></td>
+            <td><label>提币状态: </label></td>
+            <td colspan="3">
+                <input id="allstatus" type="radio" name="status" value="" checked="checked" /><label for="allstatus">全部</label>
+                <input id="unwithdrawed" type="radio" name="status" value="1"/><label for="unwithdrawed">提交</label>
+                <input id="withdrawed" type="radio" name="status" value="2"/><label for="withdrawed">同意</label>
+                <input id="radiowithdraw3" type="radio" name="status" value="3"/><label for="radiowithdraw3">拒绝</label>
+            </td>
+            <td>提币数额（区间）:</td>
+            <td colspan="3">
+                <input id="amountfrom" name="min" type="text" />
+                --
+                <input id="amountto" name="max" type="text" /></td>
+        </tr>
+    </search>
+
+    <datagrid title="提币列表" url="{{.baseapi}}/api/admin/withdrawList?token={{.table}}&status=1">
+        <th data-options="field:'id'">ID</th>
+        <th data-options="field:'uid'">用户账号</th>
+        <th data-options="field:'outer_address'">提币地址</th>
+        <th data-options="field:'balance'">提币数额</th>
+        <th data-options="field:'withdraw_fee'">提币手续费</th>
+        <th data-options="field:'miner_fee'">矿工费</th>
+        <th data-options="field:'tx_id'">交易Hash</th>
+        <th data-options="field:'statusName'">提币状态</th>
+        <th data-options="field:'ctime'">申请时间</th>
+        <th data-options="field:'mtime'">转账时间</th>
+        <th data-options="field:'aid', width: 1">操作人</th>
+        <th data-options="field:'reason', width: 1">拒绝理由</th>
+        <th data-options="field:'lcker', width: 1">锁定人</th>
+    </datagrid>
+
+    <toolbar canadd="false" canview="false" candel="false" titleedit="转账操作">
+        <a id="btnexport" href="{{.baseapi}}/api/admin/export?token={{.table}}&status=1" target="_blank" class="easyui-linkbutton" data-options="iconCls:'icon-print'">导出</a>
+    </toolbar>
+    <tools></tools>
+</section>
+
+
+<editsection action="{{.baseapi}}/api/admin/withdrawDeal">
+    <tr>
+        <td></td>
+        <td style="min-width:400px;">
+            <table>
+                <tr>
+                    <td><input type="hidden" name="id" /></td>
+                    <td><strong>用户信息</strong></td>
+                </tr>
+                    <tr>
+                        <td>账号:</td><td><span set-key="userInfo.id"></span></td>
+                    </tr>
+                    <tr>
+                        <td>邮箱:</td><td><span set-key="userInfo.email"></span></td>
+                    </tr>
+                    <tr>
+                        <td>昵称:</td><td><span set-key="userInfo.nickname"></span></td>
+                    </tr>
+                    <tr>
+                        <td>最后修改时间:</td><td><span set-key="userInfo.mtime"></span></td>
+                    </tr>
+                    <tr>
+                        <td>注册时间:</td><td><span set-key="userInfo.ctime"></span></td>
+                    </tr>
+                    <tr>
+                        <td>证件状态:</td><td><span set-key="userInfo.idCardStatusName"></span></td>
+                    </tr>
+                <tr>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tr>
+                    <td></td>
+                    <td><strong>用户认证信息(KYC)</strong></td>
+                </tr>
+                    <tr>
+                        <td>真实姓名:</td><td><span set-key="userKYC.name"></span></td>
+                    </tr>
+                    <tr>
+                        <td>证件类型:</td><td><span set-key="userKYC.typeName"></span></td>
+                    </tr>
+                    <tr>
+                        <td>证件号:</td><td><span set-key="userKYC.number"></span></td>
+                    </tr>
+                    <tr>
+                        <td>证件正面:</td>
+                        <td>
+                            <a set-key="userKYC.idcard_front" set-format="{{.userimg}}/uploads/{0}" target="_blank">
+                                <image set-key="userKYC.idcard_front" set-format="{{.userimg}}/uploads/{0}" style="max-width:100px; max-height:100px;" />
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>证件反面:</td><td>
+                            <a set-key="userKYC.idcard_back" set-format="{{.userimg}}/uploads/{0}" target="_blank">
+                                <image set-key="userKYC.idcard_back" set-format="{{.userimg}}/uploads/{0}" style="max-width:100px; max-height:100px;" />
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>证件手持:</td><td>
+                            <a set-key="userKYC.idcard_hold" set-format="{{.userimg}}/uploads/{0}" target="_blank">
+                                <image set-key="userKYC.idcard_hold" set-format="{{.userimg}}/uploads/{0}" style="max-width:100px; max-height:100px;" />
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>审核状态:</td><td><span set-key="userKYC.statusName"></span></td>
+                    </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="position:relative" valign="top">
+            <button onmouseover="show('#tabwithdraw');$('#list4user').datagrid('resize');" onmouseout="hide('#tabwithdraw')" type="button">显示用户提币记录</button>
+                <table id="tabwithdraw" style="position:absolute;left:-100px;">
+                    <tr>
+                        <td></td>
+                        <td style="width: 1200px">
+                            <datagrid id="list4user" title="提币列表" data-options="width:1200,fitColumns:true,resizeHandle:'right',pagination:false,singleSelect:true">
+                                <th data-options="field:'id'">ID</th>
+                                <th data-options="field:'uid'">用户账号</th>
+                                <th data-options="field:'outer_address'">提币地址</th>
+                                <th data-options="field:'balance'">提币数额</th>
+                                <th data-options="field:'withdraw_fee'">提币手续费</th>
+                                <th data-options="field:'miner_fee'">矿工费</th>
+                                <th data-options="field:'tx_id'">交易Hash</th>
+                                <th data-options="field:'statusName'">提币状态</th>
+                                <th data-options="field:'ctime'">申请时间</th>
+                                <th data-options="field:'mtime'">转账时间</th>
+                                <th data-options="field:'aid', width: 1">操作人</th>
+                            </datagrid>
+                        </td>
+                    </tr>
+                </table>
+        </td>
+        <td>
+            <table>
+                <tr>
+                    <td></td><td><strong>提币信息</strong></td>
+                </tr>
+                <tr>
+                    <td>用户账号:</td><td><span set-key="uid"></span></td>
+                </tr>
+                <tr>
+                    <td>提币地址:</td><td><span set-key="outer_address"></span></td>
+                </tr>
+                <tr>
+                    <td>提币数额:</td><td><span set-key="balance"></span></td>
+                </tr>
+                <tr>
+                    <td>手续费:</td><td><span set-key="withdraw_fee"></span></td>
+                </tr>
+                <tr>
+                    <td>申请时间:</td><td><span set-key="ctime"></span></td>
+                </tr>
+                <tr>
+                    <td><label>审核结果: </label></td>
+                    <td>
+                        <input id="agree" type="radio" name="status" value="2" checked="checked" onchange="restoreElements('eleid');detachElements('refuseid');" /><label for="agree">同意转账</label>
+                        <input id="refuse" type="radio" name="status" value="3" onchange="detachElements('eleid');restoreElements('refuseid');" /><label for="refuse">拒绝转账</label>
+                    </td>
+                </tr>
+                <tr eleid="rowTxid">
+                    <td>交易Hash:</td>
+                    <td><input type="text" class="easyui-validatebox" name="txId" data-options="required:true" /></td>
+                </tr>
+                <tr eleid="rowTxid2">
+                    <td>矿工费:</td><td><input id="txtminefee" type="text" class="easyui-validatebox" name="minerFee" data-options="required:true" /></td>
+                </tr>
+                <tr refuseid="reason">
+                    <td>拒绝理由:</td><td><input type="text" class="easyui-validatebox" name="reason" data-options="required:true" /></td>
+                </tr>
+            </table>
+        </td><td>
+            <div id="qrcode"></div>
+        </td>
+    </tr>
+
+</editsection>
+</body>
+</html>

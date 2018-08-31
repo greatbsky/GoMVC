@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>配置选项</title>
+    <script type="text/javascript">
+        $(function() {
+            $("#txtminefeebtc").val(Cookies.get('cfg.minefeebtc'));
+            $("#txtminefeebch").val(Cookies.get('cfg.minefeebch'));
+            $("#txtminefeeeth").val(Cookies.get('cfg.minefeeeth'));
+            $("#txtminefeeusdt").val(Cookies.get('cfg.minefeeusdt'));
+        });
+        function config() {
+            Cookies.set('cfg.minefeebtc', $("#txtminefeebtc").val());
+            Cookies.set('cfg.minefeebch', $("#txtminefeebch").val());
+            Cookies.set('cfg.minefeeeth', $("#txtminefeeeth").val());
+            Cookies.set('cfg.minefeeusdt', $("#txtminefeeusdt").val());
+        }
+    </script>
+</head>
+<body>
+<section>
+    <table>
+        <tr>
+            <td>BTC矿工费:</td>
+            <td colspan="3"><input id="txtminefeebtc" name="minefeebtc" type="text" /></td>
+        </tr>
+        <tr>
+            <td>BCH矿工费:</td>
+            <td colspan="3"><input id="txtminefeebch" name="minefeebch" type="text" /></td>
+        </tr>
+        <tr>
+            <td>ETH矿工费:</td>
+            <td colspan="3"><input id="txtminefeeeth" name="minefeeeth" type="text" /></td>
+        </tr>
+        <tr>
+            <td>USDT矿工费:</td>
+            <td colspan="3"><input id="txtminefeeusdt" name="minefeeusdt" type="text" /></td>
+        </tr>
+    </table>
+    <div class="formbtns">
+        <a href="" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="config()">设置</a>
+    </div>
+</section>
+
+
+</body>
+</html>

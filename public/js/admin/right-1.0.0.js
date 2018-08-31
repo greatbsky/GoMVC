@@ -167,6 +167,7 @@ function searchShowHandler(searchform) {
 function searchHandler(obj, dg, searchform) {
 	getDataGrid(dg).datagrid("load", getSearchForm(searchform).serializeObj());// TODO
 	// 错误处理
+    mySearchAfterHandler(obj, dg, searchform);
 }
 /**
  * 点击添加按钮处理方法
@@ -1201,3 +1202,4 @@ function myformResetHandler(event, j){}
 function myformClearHandler(event, j){}
 function myStatusAfterHandler(event, j){}
 function myResultHandler(result){ return false;} //若重载则返回return true
+function mySearchAfterHandler(obj, dg, searchform){}

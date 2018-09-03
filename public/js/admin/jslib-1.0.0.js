@@ -33,6 +33,11 @@ function alertHandler(cls, txt){
 	}
 	target.attr("class", cls).html(txt).show();
 	target.delay(5000).fadeOut("slow");
+	var fun = function() {
+        target.fadeOut("slow");
+    };
+    window.removeEventListener("close", fun, false);
+    window.addEventListener("close", fun, false);
 }
 
 /**

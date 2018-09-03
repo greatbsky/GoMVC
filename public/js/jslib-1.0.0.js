@@ -5,6 +5,10 @@ console.log = function(d) {
     }
 }
 
+window.onbeforeunload = () => {
+    window.dispatchEvent(new Event("close", {bubbles: true}))
+}
+
 /**
  * 删除字符串两边的空白
  */

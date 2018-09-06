@@ -31,7 +31,7 @@
 <div class="container">
     <div class="topbar">
         <a href="">
-            <strong></strong>http://www.{{.domain}}
+            <strong>{{.title}}</strong>
         </a>
         <span class="right">
 	        <a href="">

@@ -165,13 +165,22 @@ function searchShowHandler(searchform) {
  * @param searchform
  */
 function searchHandler(obj, dg, searchform) {
+	searchBefore(obj, dg, searchform);
 	getDataGrid(dg).datagrid("load", getSearchForm(searchform).serializeObj());// TODO
 	// 错误处理
     mySearchAfterHandler(obj, dg, searchform);
 }
 /**
+ * 搜索之前的处理方法，可以提前处理数据
+ * @param obj
+ * @param dg
+ * @param searchform
+ */
+function searchBefore(obj, dg, searchform) {
+}
+/**
  * 点击添加按钮处理方法
- * 
+ *
  * @param obj
  *            点击按钮，this
  * @param addform

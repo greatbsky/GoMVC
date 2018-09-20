@@ -91,7 +91,7 @@ function parseDate(strDateTime) {
             year = ymd[0]
         }
         if (ymd.length >= 2) {
-            month = ymd[1]
+            month = ymd[1] - 1
         }
         if (ymd.length >= 3) {
             day = ymd[2]

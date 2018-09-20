@@ -111,6 +111,17 @@ function parseDate(strDateTime) {
     }
     return new Date(year, month, day, hour, minute, seconds).getTime()
 }
+//省略过长内容
+function omit(raw, head, tail) {
+    if (raw == null || raw.length == 0) {
+        return ""
+    }
+    var result = raw
+    if(raw.length > head + tail){
+        result = raw.slice(0, head) + "......" + raw.slice(-1 * tail)
+    }
+    return result
+}
 function setScrollHeight() {
     window.name = document.documentElement.scrollTop + document.body.scrollTop;
 }

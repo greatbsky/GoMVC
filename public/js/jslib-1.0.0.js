@@ -71,6 +71,46 @@ Date.prototype.format = function(fmt) {
     }
     return fmt;
 }
+
+//将yyyy-MM-dd hh:mm:ss日期格式转换为毫秒
+function parseDate(strDateTime) {
+    if (strDateTime == null || strDateTime.length == 0) {
+        return null
+    }
+
+    var dateTimePaire = strDateTime.split(" ")
+    var year = 0
+    var month = 0
+    var day = 0
+    var hour = 0
+    var minute = 0
+    var seconds = 0
+    if (dateTimePaire.length >= 1) {
+        var ymd = dateTimePaire[0].split("-")
+        if (ymd.length >= 1) {
+            year = ymd[0]
+        }
+        if (ymd.length >= 2) {
+            month = ymd[1]
+        }
+        if (ymd.length >= 3) {
+            day = ymd[2]
+        }
+    }
+    if (dateTimePaire.length >= 2) {
+        var hms = dateTimePaire[1].split(":")
+        if (hms.length >= 1) {
+            hour = hms[0]
+        }
+        if (hms.length >= 2) {
+            minute = hms[1]
+        }
+        if (hms.length >= 3) {
+            seconds = hms[2]
+        }
+    }
+    return new Date(year, month, day, hour, minute, seconds).getTime()
+}
 function setScrollHeight() {
     window.name = document.documentElement.scrollTop + document.body.scrollTop;
 }

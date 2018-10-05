@@ -204,7 +204,7 @@ function editHandler(obj, dg, editform) {
 //	console.log(editform);
 //	console.log(urls);
 	if (editBefore(obj, dg, editform, urls, 0)) {
-		editAction(obj, dg, editform);
+		myeditAction(obj, dg, editform);
 	}
 }
 /**
@@ -227,7 +227,7 @@ function editBefore(obj, dg, editform, urls, i) {
 			if (i < urls.length) {
 				editBefore(obj, dg, editform, urls, i);
 			} else {
-				editAction(obj, dg, editform);
+                myeditAction(obj, dg, editform);
 			}
 		});
 		// 调用ajax时不返回值，在方法内部调用action
@@ -1197,6 +1197,9 @@ function mytoolbarStateHandler(event, j) {
 		var list = getSelections(j.dg);
 	}
  */
+function myeditAction(obj, dg, editform) {
+    editAction(obj, dg, editform)
+}
 function mydgOnSelectHandler(event, j){}
 function mydgOnUnSelectHandler(event, j){}
 function mydgOnSelectAlltHandler(event, j){}

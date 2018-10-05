@@ -6,10 +6,6 @@
         tr {line-height:30px;}
         .mlfttop60 {margin-left:60px; margin-top: 60px;}
     </style>
-    <script type="text/javascript">
-        <!--
-        -->
-    </script>
 </head>
 <body>
 <section>

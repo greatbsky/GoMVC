@@ -3,9 +3,6 @@
 <head>
     <title>后台管理中心——{{.title}}</title>
     {{template "base/head.tpl" .}}
-    <style type="text/css" media="screen">
-
-    </style>
     <script type="text/javascript">
         <!--
         forbiddenIframe();

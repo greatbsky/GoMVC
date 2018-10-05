@@ -6,10 +6,10 @@
     {{.head}}
 </head>
 <body class="rightpanel">
-<div id="main" class="column">
-    <h4 id="alert"></h4>
-    {{.body}}
-</div>
-{{template "base/foot.tpl" .}}
+    <div id="main" class="column">
+        <h4 id="alert"></h4>
+        {{.body}}
+    </div>
+    {{template "base/foot.tpl" .}}
 </body>
 </html>

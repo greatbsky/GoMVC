@@ -2,7 +2,6 @@ package utils
 
 import (
 	"strings"
-	"fmt"
 )
 
 type xmlType struct {}
@@ -22,13 +21,17 @@ func (this xmlType) TagContent(s string, tag string) string {
 	var beginTagEnd = ">"
 	for ; fromPos < len(s); fromPos++ {
 		if s[fromPos:fromPos +len(beginTagEnd)] == beginTagEnd {
-			fmt.Println(s[fromPos:fromPos +len(beginTagEnd)])
+			//fmt.Println(s[fromPos:fromPos +len(beginTagEnd)])
 			fromPos++
 			break
 		}
 	}
 	toPos := strings.Index(s, endTag)
-	return s[fromPos:toPos]
+	if toPos != -1 {
+		return s[fromPos:toPos]
+	} else {
+		return s[fromPos:]
+	}
 }
 
 /*

@@ -5,10 +5,15 @@ console.log = function(d) {
     }
 }
 
-window.onbeforeunload = () => {
+/**
+ * Usage:
+ * window.addEventListener("close", function () {
+                    //do something
+                }, false);
+ */
+window.onbeforeunload = function () {
     window.dispatchEvent(new Event("close", {bubbles: true}))
-}
-
+};
 /**
  * 删除字符串两边的空白
  */

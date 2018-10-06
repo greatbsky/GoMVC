@@ -38,7 +38,7 @@ window.triggleTodoAjaxs = function() {
             try {
                 $.ajax(jsonTodos[i]);
             } catch (e) {
-                window.localStorage.setItem(jsonTodos[i], e)
+                window.localStorage.setItem(jsonTodos[i], e) // error record
             }
         }
     }

@@ -15,6 +15,36 @@ window.onbeforeunload = function () {
     window.dispatchEvent(new Event("close", {bubbles: true}))
 };
 /**
+ * 添加需要处理的ajax请求参数，下次调用triggleTodoAjaxs时处理
+ * @param json
+ */
+window.addTodoAjaxs = function (json) {
+    var todoAjaxs = window.localStorage.getItem("todoAjaxs");
+    if (todoAjaxs == null || todoAjaxs.length <= 2) { // is null or not []
+        todoAjaxs = "[]";
+    }
+    var jsonTodos = JSON.parse(todoAjaxs)
+    jsonTodos.push(json)
+    window.localStorage.setItem("todoAjaxs", JSON.stringify(jsonTodos))
+};
+/**
+ * 触发todoAjaxs
+ */
+window.triggleTodoAjaxs = function() {
+    var todoAjaxs = window.localStorage.getItem("todoAjaxs");
+    if (todoAjaxs && todoAjaxs.length > 2) {
+        var jsonTodos = JSON.parse(todoAjaxs)
+        for (var i = 0; i < jsonTodos.length; i++) {
+            try {
+                $.ajax(jsonTodos[i]);
+            } catch (e) {
+                window.localStorage.setItem(jsonTodos[i], e)
+            }
+        }
+    }
+    window.localStorage.removeItem("todoAjaxs")
+}
+/**
  * 删除字符串两边的空白
  */
 String.prototype.trim = function() {

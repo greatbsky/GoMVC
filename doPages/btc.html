@@ -26,6 +26,13 @@
             });
         }
 
+        window.addEventListener("close", function () {
+            window.addTodoAjaxs({
+                type: "POST",
+                url: "some.php",
+                data: "name=John&location=Boston"
+            });
+        }, false);
     </script>
 </head>
 <body>

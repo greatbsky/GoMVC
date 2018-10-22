@@ -5,7 +5,8 @@ all : clean deps build deploy
 
 .PHONY: deps
 deps :
-	go get github.com/julienschmidt/httprouter;
+	go get github.com/julienschmidt/httprouter; go get github.com/BurntSushi/toml;
+	go get -u go.uber.org/zap; go get -u github.com/gobasis/log;
 
 .PHONY: build
 build :

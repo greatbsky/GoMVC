@@ -2,23 +2,21 @@ package main
 
 import (
 	"fmt"
+	"github.com/gobasis/log"
+	"github.com/gobasis/log/zapimpl"
+	"github.com/greatbsky/gomvc/config"
 	"net/http"
-	"log"
-	"github.com/julienschmidt/httprouter"
+	"github.com/greatbsky/gomvc/routers"
 )
 
-func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprint(w, "Welcome!\n")
-}
-
-func Hello(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	fmt.Fprintf(w, "hello, %s!\n", ps.ByName("name"))
-}
-
 func main() {
-	router := httprouter.New()
-	router.GET("/", Index)
-	router.GET("/hello/:name", Hello)
+	log.UseLog(&zapimpl.Logger{}) // use zap log
+	log.SetLevel(log.DevDebugLevel)
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	addr := fmt.Sprintf("%s:%d", config.ServerConf.Address, config.ServerConf.Port)
+	log.Info("starting http server", "address", addr)
+	err := http.ListenAndServe(addr, routers.GetRouter())
+	if err != nil {
+		log.Fatal("http server start failed", "error", err)
+	}
 }

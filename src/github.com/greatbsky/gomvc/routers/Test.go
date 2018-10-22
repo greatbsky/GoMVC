@@ -15,8 +15,8 @@ func Hello(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 }
 
 func init()  {
-	router.GET("/", Index)
-	router.GET("/hello/:name", Hello)
+	initGet("/", Index)
+	initGet("/hello/:name", Hello)
 }
 
 

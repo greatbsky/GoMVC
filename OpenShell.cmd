@@ -1,4 +1,5 @@
 @echo off
 cd %~dp0
-
-start cmd /K Make.bat init
+set GOPATH=%~dp0
+set PATH=%PATH%;%GOPATH%\bin
+start cmd /K

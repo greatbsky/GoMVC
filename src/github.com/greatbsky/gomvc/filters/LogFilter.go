@@ -7,6 +7,7 @@ import (
 )
 
 const requestUid = "requestUid"
+
 /*
 Description:
 logBefore write a log before a request handler

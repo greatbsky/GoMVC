@@ -1,22 +1,52 @@
 package routers
 
 import (
-	"net/http"
-	"github.com/julienschmidt/httprouter"
 	"fmt"
+	"github.com/greatbsky/gomvc/config"
 )
 
-func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprint(w, "Welcome!\n")
+func index(ctx *Context) interface{} {
+	ctx.Input.Data["title"] = "hi world from index"
+	return "index"
 }
 
-func Hello(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	fmt.Fprintf(w, "hello, %s!\n", ps.ByName("name"))
+func getJson(ctx *Context) interface{} {
+	//m := make(map[string]interface{})
+	//m["k1"] = 123
+	//m["k2"] = "v2"
+	//m["k3"] = []string{"a", "b", "c"}
+	//return m
+	return config.ApplicationConf
 }
 
+func header(ctx *Context) interface{} {
+	ctx.ResponseWriter.Header().Set("Content-Type", "application/json")
+	ctx.ResponseWriter.Header().Set("Access-Control-Allow-Origin", "*")
+	ctx.ResponseWriter.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	ctx.ResponseWriter.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With, X-MY-API-Version")
+	ctx.ResponseWriter.Header().Set("Access-Control-Allow-Credentials", "true")
+	ctx.ResponseWriter.Header().Set("Access-Control-Allow-Origin", "*")
+	ctx.ResponseWriter.WriteHeader(500)
+	return "500"
+}
+
+func hello(ctx *Context) interface{} {
+	//time.Sleep(10 * time.Second)
+	fmt.Fprintf(ctx.ResponseWriter, "hello, %s!\n", ctx.Input.PathParams.ByName("name"))
+	return nil
+}
+
+/*
+Description:
+initialize before application start up
+ * Author: architect.bian
+ * Date: 2018/10/23 13:39
+ */
 func init()  {
-	initGet("/", Index)
-	initGet("/hello/:name", Hello)
+	Router.InitGet("/", index)
+	Router.InitGet("/json", getJson)
+	Router.InitGet("/header", header)
+	Router.InitGet("/hello/:name", hello)
 }
 
 

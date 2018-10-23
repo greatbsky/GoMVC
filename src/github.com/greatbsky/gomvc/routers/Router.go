@@ -3,12 +3,57 @@ package routers
 import (
 	"github.com/julienschmidt/httprouter"
 	"net/http"
+	"reflect"
+	"encoding/json"
+	"github.com/gobasis/log"
+	"regexp"
 )
 
-var router = httprouter.New()
+/*
+Description: 
+RouterType wrap with httprouter.RouterType, and some defined-self methods.
+ * Author: architect.bian
+ * Date: 2018/10/23 11:00
+ */
+type RouterType struct {
+	rawRouter *httprouter.Router
+	filters map[string]filterHandler
+}
 
-func GetRouter() *httprouter.Router {
-	return router
+/*
+Description:
+Handler a handle function for the request, accept a param context
+ * Author: architect.bian
+ * Date: 2018/10/23 12:26
+ */
+type Handler func(*Context) interface{}
+
+/*
+Description:
+Filter A filter function for the request
+ * Author: architect.bian
+ * Date: 2018/10/23 13:52
+ */
+type Filter func(*Context)
+
+/*
+Description:
+filterHandler a filter type with before or after handler
+ * Author: architect.bian
+ * Date: 2018/10/23 11:38
+ */
+type filterHandler struct {
+	before Filter
+	after  Filter
+}
+
+var Router = RouterType{
+	rawRouter: httprouter.New(),
+	filters: make(map[string]filterHandler),
+}
+
+func (r *RouterType) GetRawRouter() *httprouter.Router {
+	return r.rawRouter
 }
 
 /*
@@ -17,8 +62,8 @@ mapping a handler with get method
  * Author: architect.bian
  * Date: 2018/10/22 20:27
  */
-func initGet(path string, handle httprouter.Handle) {
-	router.GET(path, proxyFun(handle))
+func (r *RouterType) InitGet(path string, handler Handler) {
+	r.rawRouter.GET(path, proxyFun(handler))
 }
 
 /*
@@ -27,8 +72,8 @@ mapping a handler with HEAD method
  * Author: architect.bian
  * Date: 2018/10/22 20:31
  */
-func initHEAD(path string, handle httprouter.Handle) {
-	router.GET(path, proxyFun(handle))
+func (r *RouterType) InitHEAD(path string, handler Handler) {
+	r.rawRouter.GET(path, proxyFun(handler))
 }
 
 /*
@@ -37,8 +82,8 @@ mapping a handler with OPTIONS method
  * Author: architect.bian
  * Date: 2018/10/22 20:31
  */
-func initOPTIONS(path string, handle httprouter.Handle) {
-	router.OPTIONS(path, proxyFun(handle))
+func (r *RouterType) InitOPTIONS(path string, handler Handler) {
+	r.rawRouter.OPTIONS(path, proxyFun(handler))
 }
 
 /*
@@ -47,8 +92,8 @@ mapping a handler with POST method
  * Author: architect.bian
  * Date: 2018/10/22 20:31
  */
-func initPOST(path string, handle httprouter.Handle) {
-	router.POST(path, proxyFun(handle))
+func (r *RouterType) InitPOST(path string, handler Handler) {
+	r.rawRouter.POST(path, proxyFun(handler))
 }
 
 /*
@@ -57,8 +102,8 @@ mapping a handler with PUT method
  * Author: architect.bian
  * Date: 2018/10/22 20:31
  */
-func initPUT(path string, handle httprouter.Handle) {
-	router.PUT(path, proxyFun(handle))
+func (r *RouterType) InitPUT(path string, handler Handler) {
+	r.rawRouter.PUT(path, proxyFun(handler))
 }
 
 /*
@@ -67,8 +112,8 @@ mapping a handler with PATCH method
  * Author: architect.bian
  * Date: 2018/10/22 20:31
  */
-func initPATCH(path string, handle httprouter.Handle) {
-	router.PATCH(path, proxyFun(handle))
+func (r *RouterType) InitPATCH(path string, handler Handler) {
+	r.rawRouter.PATCH(path, proxyFun(handler))
 }
 
 /*
@@ -77,8 +122,8 @@ mapping a handler with DELETE method
  * Author: architect.bian
  * Date: 2018/10/22 20:31
  */
-func initDELETE(path string, handle httprouter.Handle) {
-	router.DELETE(path, proxyFun(handle))
+func (r *RouterType) InitDELETE(path string, handler Handler) {
+	r.rawRouter.DELETE(path, proxyFun(handler))
 }
 
 /*
@@ -87,12 +132,69 @@ mapping a handler with special method
  * Author: architect.bian
  * Date: 2018/10/22 20:31
  */
-func initHandle(method, path string, handle httprouter.Handle) {
-	router.Handle(method, path, proxyFun(handle))
+func (r *RouterType) InitHandler(method, path string, handler Handler) {
+	r.rawRouter.Handle(method, path, proxyFun(handler))
 }
 
-func proxyFun(handle httprouter.Handle) httprouter.Handle {
-	return func (w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		handle(w, r, ps)
+/*
+Description:
+filter some request as interceptor
+ * Author: architect.bian
+ * Date: 2018/10/23 10:31
+ */
+func (r *RouterType) InitFilter(pattern string, handlerBefore Filter, handlerAfter Filter) {
+	r.filters[pattern] = filterHandler {
+		before: handlerBefore,
+		after:  handlerAfter,
+	}
+}
+
+/*
+Description:
+proxyFun a proxy for any handler
+ * Author: architect.bian
+ * Date: 2018/10/23 11:38
+ */
+func proxyFun(handler Handler) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		var filter filterHandler
+		for key, value := range Router.filters {
+			ok, err := regexp.MatchString(key, r.URL.RawPath)
+			if err == nil && ok {
+				filter = value
+				break
+			}
+		}
+		var ctxNew = &Context{
+			Input: &Input{
+				PathParams: ps,
+				Data:       make(map[interface{}]interface{}),
+			},
+			Output: &Output{
+				Status: 200,
+				EnableGzip: true,
+			},
+			Request: r,
+			ResponseWriter: w,
+		}
+		if filter.before != nil {
+			filter.before(ctxNew) //invoke before filter
+		}
+		result := handler(ctxNew)
+		if reflect.TypeOf(result).String() == "string" {
+			w.Write([]byte(result.(string))) //response raw result
+		} else if result != nil {
+			bytes, err := json.Marshal(result)
+			if err != nil {
+				log.Error("json marshal failed", "result", result, "error", err)
+				w.WriteHeader(500)
+			} else {
+				w.Header().Set("Content-Type", "application/json")
+				w.Write(bytes)
+			}
+		}
+		if filter.after != nil {
+			filter.after(ctxNew) //invoke after filter
+		}
 	}
 }

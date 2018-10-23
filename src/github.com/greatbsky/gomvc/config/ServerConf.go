@@ -18,9 +18,15 @@ type ServerConfType struct {
 
 var ServerConf ServerConfType
 
+/*
+Description:
+initialize parse conf file before application start up
+ * Author: architect.bian
+ * Date: 2018/10/23 13:39
+ */
 func init() {
 	_, err := toml.DecodeFile("conf/server.conf", &ServerConf)
 	if err != nil {
-		log.Fatal("", "error", err)
+		log.Fatal("server conf file parse failed", "error", err)
 	}
 }

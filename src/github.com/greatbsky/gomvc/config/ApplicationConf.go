@@ -1,6 +1,10 @@
 package config
 
-import "path/filepath"
+import (
+	"path/filepath"
+	"github.com/BurntSushi/toml"
+	"github.com/gobasis/log"
+)
 
 
 var ApplicationConf ApplicationConfType
@@ -35,6 +39,16 @@ type SysType struct {
 	LoginToken string
 }
 
+/*
+Description:
+initialize parse conf file before application start up
+ * Author: architect.bian
+ * Date: 2018/10/23 13:38
+ */
 func init() {
 	ApplicationConf.Sys.RootDir, _ = filepath.Abs("./")
+	_, err := toml.DecodeFile("conf/application.conf", &ApplicationConf)
+	if err != nil {
+		log.Fatal("application conf file parse failed", "error", err)
+	}
 }

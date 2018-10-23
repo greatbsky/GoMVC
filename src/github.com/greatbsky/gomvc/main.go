@@ -7,6 +7,7 @@ import (
 	"github.com/greatbsky/gomvc/config"
 	"net/http"
 	"github.com/greatbsky/gomvc/routers"
+	_ "github.com/greatbsky/gomvc/filters"
 )
 
 func main() {
@@ -15,7 +16,8 @@ func main() {
 
 	addr := fmt.Sprintf("%s:%d", config.ServerConf.Address, config.ServerConf.Port)
 	log.Info("starting http server", "address", addr)
-	err := http.ListenAndServe(addr, routers.GetRouter())
+	routers.Router.GetRawRouter().NotFound = http.FileServer(http.Dir("public"))
+	err := http.ListenAndServe(addr, routers.Router.GetRawRouter())
 	if err != nil {
 		log.Fatal("http server start failed", "error", err)
 	}

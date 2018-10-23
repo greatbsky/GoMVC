@@ -1,4 +1,4 @@
 # GoMVC
 
-- make deps
+- make deps(OpenShell.cmd)
 - make build

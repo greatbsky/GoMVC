@@ -181,9 +181,11 @@ func proxyFun(handler Handler) httprouter.Handle {
 			filter.before(ctxNew) //invoke before filter
 		}
 		result := handler(ctxNew)
-		if reflect.TypeOf(result).String() == "string" {
+		if result == nil {
+			//do nothing
+		} else if reflect.TypeOf(result).String() == "string" {
 			w.Write([]byte(result.(string))) //response raw result
-		} else if result != nil {
+		} else {
 			bytes, err := json.Marshal(result)
 			if err != nil {
 				log.Error("json marshal failed", "result", result, "error", err)

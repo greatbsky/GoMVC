@@ -14,6 +14,7 @@ server config file
 type ServerConfType struct {
 	Address string `toml:"address"`
 	Port    int32
+	Public string `toml:"public"`
 }
 
 var ServerConf ServerConfType

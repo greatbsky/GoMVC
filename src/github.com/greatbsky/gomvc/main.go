@@ -16,7 +16,7 @@ func main() {
 
 	addr := fmt.Sprintf("%s:%d", config.ServerConf.Address, config.ServerConf.Port)
 	log.Info("starting http server", "address", addr)
-	routers.Router.GetRawRouter().NotFound = http.FileServer(http.Dir("public"))
+	routers.Router.GetRawRouter().NotFound = http.FileServer(http.Dir(config.ServerConf.Public))
 	err := http.ListenAndServe(addr, routers.Router.GetRawRouter())
 	if err != nil {
 		log.Fatal("http server start failed", "error", err)

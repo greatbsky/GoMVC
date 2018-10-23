@@ -3,7 +3,7 @@ package filters
 import (
 	"github.com/greatbsky/gomvc/routers"
 	"github.com/gobasis/log"
-	"github.com/greatbsky/gomvc/utils"
+	"github.com/gobasis/utils"
 )
 
 const requestUid = "requestUid"

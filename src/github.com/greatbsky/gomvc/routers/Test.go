@@ -16,7 +16,7 @@ func getJson(_ *http.Context) interface{} {
 	//m["k2"] = "v2"
 	//m["k3"] = []string{"a", "b", "c"}
 	//return m
-	return http.ApplicationConf
+	return http.ServerConf
 }
 
 func header(ctx *http.Context) interface{} {

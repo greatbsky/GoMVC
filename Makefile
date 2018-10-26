@@ -8,7 +8,15 @@ deps :
 	go get -u github.com/julienschmidt/httprouter; go get -u github.com/BurntSushi/toml;
 	go get -u go.uber.org/zap; go get -u github.com/gobasis/log;
 	go get -u github.com/satori/go.uuid; go get -u github.com/gobasis/utils;
-	go get -u github.com/gobasis/http;
+	go get -u github.com/gobasis/http; go get -u github.com/go-sql-driver/mysql;
+
+.PHONY : init
+init :
+	cd ./src/github.com/greatbsky/gomvc/dao/Init; go test -v -count=1 Init_test.go;
+
+.PHONY: test
+test :
+	cd src/github.com/greatbsky/gomvc/;
 
 .PHONY: build
 build :

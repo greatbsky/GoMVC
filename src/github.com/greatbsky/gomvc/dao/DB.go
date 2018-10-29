@@ -25,4 +25,5 @@ func init() {
 	DB.DB().SetMaxOpenConns(config.MysqlConf.MaxOpenConns)
 	DB.DB().SetMaxIdleConns(config.MysqlConf.MaxIdleConns)
 	DB.DB().SetConnMaxLifetime(time.Duration(config.MysqlConf.ConnMaxLifetime))
+	//DB = DB.Debug()
 }

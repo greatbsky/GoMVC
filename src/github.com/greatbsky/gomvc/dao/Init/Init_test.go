@@ -12,12 +12,14 @@ import (
 	"strings"
 	"bytes"
 	"regexp"
+	"time"
 )
 
 var dbNames = []string {
 	"AdminDB",
 }
 var db *sql.DB
+
 /*
 Description:
 A testor for init database schema & data
@@ -31,7 +33,10 @@ func TestInit(t *testing.T) {
 		log.Fatal(err)
 	}
 	defer db.Close()
-	for _, name := range dbNames  {
+	db.SetMaxOpenConns(config.MysqlConf.MaxOpenConns)
+	db.SetMaxIdleConns(config.MysqlConf.MaxIdleConns)
+	db.SetConnMaxLifetime(time.Duration(config.MysqlConf.ConnMaxLifetime))
+	for _, name := range dbNames {
 		log.Println("begin to initialize Schema " + name)
 		execSql("Schema", name) //init schema
 		log.Println("begin to initialize data " + name)

@@ -9,6 +9,7 @@ deps :
 	go get -u go.uber.org/zap; go get -u github.com/gobasis/log;
 	go get -u github.com/satori/go.uuid; go get -u github.com/gobasis/utils;
 	go get -u github.com/gobasis/http; go get -u github.com/go-sql-driver/mysql;
+	go get -u github.com/jinzhu/gorm;
 
 .PHONY : init
 init :
@@ -18,9 +19,13 @@ init :
 test :
 	cd src/github.com/greatbsky/gomvc/;
 
+.PHONY: run
+run :
+	go run src/github.com/greatbsky/gomvc/main.go
+
 .PHONY: build
 build :
-	go build -o gomvc github.com/greatbsky/gomvc
+	go build -o gomvc src/github.com/greatbsky/gomvc
 
 .PHONY: clean
 clean :

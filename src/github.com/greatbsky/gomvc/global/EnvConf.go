@@ -30,7 +30,7 @@ func init() {
 	if utils.File.Exist(EnvConf.Root + "/conf/env.conf") {
 		_, err := toml.DecodeFile(EnvConf.Root + "/conf/env.conf", &EnvConf)
 		if err != nil {
-			log.Fatal("application conf file parse failed", "error", err)
+			log.Fatal("mysql conf file parse failed", "error", err)
 		}
 	}
 	EnvConf.Root, _ = filepath.Abs(EnvConf.Root)

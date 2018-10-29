@@ -17,6 +17,9 @@ var MysqlConf mysqlConfType
 type mysqlConfType struct {
 	Conn string `toml:"conn"`
 	DriverName string `toml:"driverName"`
+	MaxOpenConns int `toml:"maxOpenConns"`
+	MaxIdleConns int `toml:"maxIdleConns"`
+	ConnMaxLifetime int `toml:"connMaxLifetime"`
 }
 
 /*
@@ -28,6 +31,6 @@ initialize parse conf file before application start up
 func init() {
 	_, err := toml.DecodeFile(global.EnvConf.Root + "/conf/mysql.conf", &MysqlConf)
 	if err != nil {
-		log.Fatal("application conf file parse failed", "error", err)
+		log.Fatal("mysql conf file parse failed", "error", err)
 	}
 }

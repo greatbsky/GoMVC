@@ -3,6 +3,7 @@ package routers
 import (
 	"fmt"
 	"github.com/gobasis/http"
+	"github.com/greatbsky/gomvc/so/adminso"
 )
 
 func index(ctx *http.Context) interface{} {
@@ -16,7 +17,9 @@ func getJson(_ *http.Context) interface{} {
 	//m["k2"] = "v2"
 	//m["k3"] = []string{"a", "b", "c"}
 	//return m
-	return http.ServerConf
+	//return http.ServerConf
+	result := adminso.ListAll()
+	return result
 }
 
 func header(ctx *http.Context) interface{} {

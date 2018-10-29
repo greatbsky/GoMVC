@@ -2,8 +2,8 @@ package config
 
 import (
 	"github.com/BurntSushi/toml"
-	"github.com/gobasis/log"
 	"github.com/greatbsky/gomvc/global"
+	"github.com/gobasis/log"
 )
 
 var AppConf appConfType
@@ -20,8 +20,8 @@ type apiType struct {
 /*
 Description:
 initialize parse conf file before application start up
- * Author: architect.bian
- * Date: 2018/10/23 13:38
+* Author: architect.bian
+* Date: 2018/10/23 13:38
 */
 func init() {
 	_, err := toml.DecodeFile(global.EnvConf.Root + "/conf/application.conf", &AppConf)

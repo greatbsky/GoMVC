@@ -18,6 +18,12 @@ var dbNames = []string {
 	"AdminDB",
 }
 var db *sql.DB
+/*
+Description:
+A testor for init database schema & data
+ * Author: architect.bian
+ * Date: 2018/10/29 11:30
+ */
 func TestInit(t *testing.T) {
 	var err error
 	db, err = sql.Open(config.MysqlConf.DriverName, config.MysqlConf.Conn)
@@ -33,29 +39,14 @@ func TestInit(t *testing.T) {
 		log.Println("begin to initialize test Data " + name)
 		execSql("InitData", name + "_Test") //init test data
 	}
-	//rows, err := db.Query("SELECT 1 as first, 2 as second;")
-	//if err != nil {
-	//	log.Println(err)
-	//}
-	//defer rows.Close()
-	////var a string
-	////var name string
-	////for rows.Next() {
-	////	err := rows.Scan(&a, &name)
-	////	if err != nil {
-	////		log.Fatal(err)
-	////	}
-	////	log.Println(name)
-	////}
-	//// Get column names
-	//columns, err := rows.Columns()
-	//if err != nil {
-	//	panic(err.Error())
-	//}
-	//fmt.Println(columns)
-
 }
 
+/*
+Description:
+exec sql match filename in dirname
+ * Author: architect.bian
+ * Date: 2018/10/29 11:29
+ */
 func execSql(dirName, fileName string) {
 	var dir = "./DB/" + dirName
 	var buffer bytes.Buffer
@@ -95,10 +86,16 @@ func execSql(dirName, fileName string) {
 	tx.Commit()
 }
 
+/*
+Description:
+format content, extract sql
+ * Author: architect.bian
+ * Date: 2018/10/29 11:29
+ */
 func formatSql(content []byte) []string {
-	content = regexp.MustCompile(`\/\*[\s\S]*?\*\/`).ReplaceAll(content, []byte{})
-	content = regexp.MustCompile(`\r`).ReplaceAll(content, []byte(""))
-	content = regexp.MustCompile(`^[^\w+]*`).ReplaceAll(content, []byte(" "))
-	content = regexp.MustCompile("\uFEFF").ReplaceAll(content, []byte(""))
+	content = regexp.MustCompile(`\/\*[\s\S]*?\*\/`).ReplaceAll(content, []byte{}) //replace comment /*xxx*/
+	content = regexp.MustCompile(`\r`).ReplaceAll(content, []byte("")) //replace /r
+	content = regexp.MustCompile(`^[^\w+]*`).ReplaceAll(content, []byte(" ")) //replace prefix space word
+	content = regexp.MustCompile("\uFEFF").ReplaceAll(content, []byte("")) //replace BOM(Byte Order Mark)
 	return strings.Split(string(content), ";")
 }

@@ -6,11 +6,12 @@ import (
 	_ "github.com/greatbsky/gomvc/routers"
 	_ "github.com/greatbsky/gomvc/config"
 	"github.com/gobasis/http"
+	"github.com/gobasis/utils"
 )
 
 func main() {
 	log.UseLog(&zapimpl.Logger{}) // use zap log
 	log.SetLevel(log.DevDebugLevel)
-
+	utils.RunEnv.Setup()
 	http.Run()
 }

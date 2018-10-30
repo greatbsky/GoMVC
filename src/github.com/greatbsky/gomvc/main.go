@@ -12,6 +12,6 @@ import (
 func main() {
 	log.UseLog(&zapimpl.Logger{}) // use zap log
 	log.SetLevel(log.DevDebugLevel)
-	utils.RunEnv.Setup()
+	utils.RunEnv.Setup("pprof", 120)
 	http.Run()
 }

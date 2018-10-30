@@ -19,6 +19,10 @@ init :
 test :
 	cd src/github.com/greatbsky/gomvc/;
 
+.PHONY: debug
+debug :
+	GODEBUG=gctrace=1; gcvis go run src/github.com/greatbsky/gomvc/main.go
+
 .PHONY: run
 run :
 	go run src/github.com/greatbsky/gomvc/main.go

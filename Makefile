@@ -29,7 +29,7 @@ run :
 
 .PHONY: build
 build :
-	go build -o gomvc src/github.com/greatbsky/gomvc
+	go build -o gomvc github.com/greatbsky/gomvc
 
 .PHONY: clean
 clean :

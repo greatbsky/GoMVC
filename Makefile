@@ -10,6 +10,7 @@ deps :
 	go get -u github.com/satori/go.uuid; go get -u github.com/gobasis/utils;
 	go get -u github.com/gobasis/http; go get -u github.com/go-sql-driver/mysql;
 	go get -u github.com/jinzhu/gorm;
+	go get -u github.com/golang/protobuf/protoc-gen-go;
 
 .PHONY : init
 init :
@@ -42,4 +43,9 @@ deploy : clean
 .PHONY: tar
 tar :
 	cd ./target; tar -zvcf gomvc.tar.gz *
+
+.PHONY: protoc
+protoc :
+	cd ./src; protoc --go_out=plugins=grpc:. github.com/greatbsky/gomvc/pb/hello.proto;
+	cd ./src; protoc --go_out=plugins=grpc:. github.com/greatbsky/gomvc/pb/message.proto;
 
